@@ -175,7 +175,16 @@ class AuthMenu extends React.Component {
   };
 
   onGoogleSignIn = () => {
-    this.runAuthAction(() => auth.signInWithPopup(googleProvider));
+    this.runAuthAction(() => (
+      auth.signInWithPopup(googleProvider)
+        .catch((error) => {
+          if (this.shouldUseRedirectFallback(error)) {
+            return auth.signInWithRedirect(googleProvider);
+          }
+
+          throw error;
+        })
+    ));
   };
 
   onSignOut = () => {
@@ -194,6 +203,14 @@ class AuthMenu extends React.Component {
     action()
       .catch(error => this.setState({error: error.message}))
       .finally(() => this.setState({loading: false}));
+  }
+
+  shouldUseRedirectFallback(error) {
+    return [
+      'auth/cancelled-popup-request',
+      'auth/operation-not-supported-in-this-environment',
+      'auth/popup-blocked',
+    ].includes(error && error.code);
   }
 }
 

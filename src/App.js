@@ -76,6 +76,8 @@ class App extends Component {
       return;
     }
 
+    auth.getRedirectResult().catch(error => this.props.authError(error.message));
+
     this.unsubscribeAuth = auth.onAuthStateChanged(
       user => {
         if (!user) {
@@ -85,7 +87,10 @@ class App extends Component {
 
         upsertUserProfile(user)
           .then(profile => this.props.authStateChanged(profile))
-          .catch(error => this.props.authError(error.message));
+          .catch(error => {
+            this.props.authStateChanged(user);
+            this.props.authError(error.message);
+          });
       },
       error => this.props.authError(error.message)
     );
