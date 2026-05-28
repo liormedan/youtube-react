@@ -3,6 +3,7 @@
 exports[`Watch renders 1`] = `
 <Connect(WatchContent)
   bottomReachedCallback={[Function]}
+  customVideo={null}
   videoId={null}
 />
 `;

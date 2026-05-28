@@ -35,9 +35,10 @@
   .video-preview-metadata-container {
     padding-top: 5px;
     font-size: 14px;
-    color: #6e6e6e;
+    color: $grey;
 
     .channel-title {
+      color: $brand-primary-dark;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -56,6 +57,8 @@
   }
 
   .semi-bold {
+    color: $text-color-dark;
+
     &.expanded {
       font-weight: 500;
       font-size: 1.3rem;
@@ -72,13 +75,13 @@
   /* Video duration label at bottom right */
   .time-label {
     position: absolute;
-    background: $text-color-dark;
+    background: $brand-primary-dark;
     bottom: 0;
     right: 0;
     opacity: 0.8;
     border-radius: 2px;
     font-weight: 500;
-    color: white;
+    color: #fff;
     margin: 4px;
     padding: 2px 4px;
     line-height: 12px;

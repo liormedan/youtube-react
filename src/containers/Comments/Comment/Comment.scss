@@ -11,12 +11,16 @@
     }
 
     .user-name {
+        color: $brand-primary-dark;
         font-weight: 600;
         margin-bottom: 4px;
     }
+
     .comment-actions {
         margin-top: 4px;
+
         button {
+            color: $brand-primary-dark;
             margin-left: 8px;
         }
     }

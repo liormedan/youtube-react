@@ -1,13 +1,20 @@
+@import '../../../styles/shared.scss';
+
 .next-up-container {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
+  h4 {
+    color: $text-color-dark;
+  }
 
   .up-next-toggle {
     display: flex;
     align-items: center;
 
     span {
+      color: $brand-primary-dark;
       margin-right: 10px;
     }
   }

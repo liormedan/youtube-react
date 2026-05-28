@@ -1,19 +1,26 @@
+@import '../../../styles/shared.scss';
+
 .sidebar-item {
-  background: #f5f5f5;
+  background: transparent;
   span {
     i.icon {
       margin-right: 20px;
-      color: #888888;
+      color: $brand-primary-dark;
+      opacity: 0.72;
     }
   }
 
   &.highlight-item {
+    background: linear-gradient(90deg, rgba(201, 242, 77, 0.32), rgba(50, 174, 232, 0.12));
+
     span {
+      color: $text-color-dark;
       font-weight: 600;
     }
 
     i.icon {
-      color: #ff0002;
+      color: $brand-primary;
+      opacity: 1;
     }
   }
 }

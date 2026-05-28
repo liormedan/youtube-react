@@ -29,19 +29,27 @@ exports[`SideBar renders 1`] = `
   <withRouter(SideBarItem)
     icon="history"
     label="History"
+    path="/library/history"
   />
   <withRouter(SideBarItem)
     icon="clock"
     label="Watch later"
+    path="/library/watch-later"
   />
   <withRouter(SideBarItem)
     icon="thumbs up"
     label="Liked videos"
+    path="/library/liked"
+  />
+  <withRouter(SideBarItem)
+    icon="cloud upload"
+    label="Upload links"
+    path="/studio/videos"
   />
   <Divider />
   <Subscriptions />
   <SideBarHeader
-    title="More from Youtube"
+    title="More from medan-Tube"
   />
   <withRouter(SideBarItem)
     icon="film"

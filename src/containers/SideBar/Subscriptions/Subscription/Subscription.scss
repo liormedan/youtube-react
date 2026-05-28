@@ -7,7 +7,8 @@
   align-items: center;
 
   i.icon {
-    color: $red;
+    color: $brand-accent;
+    text-shadow: 0 0 0 $brand-accent-dark;
   }
 
   .new-videos-count {

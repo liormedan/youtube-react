@@ -12,7 +12,7 @@ exports[`SideBarFooter renders 1`] = `
       Creators Advertise
     </div>
     <div>
-      Developers +MyTube
+      Developers +medan-Tube
     </div>
     <div>
       Legal
@@ -42,7 +42,7 @@ exports[`SideBarFooter renders 1`] = `
     className="footer-block"
   >
     <div>
-      © Productioncoder.com - A Youtube clone for educational purposes under fair use.
+      medan-Tube - A local video app demo for educational purposes.
     </div>
   </div>
 </Fragment>

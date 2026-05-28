@@ -4,10 +4,21 @@ import './HomeContent.scss';
 import {getMostPopularVideos, getVideosByCategory} from '../../../store/reducers/videos';
 import {connect} from 'react-redux';
 import {InfiniteScroll} from '../../../components/InfiniteScroll/InfiniteScroll';
+import {listUserVideos} from '../../../services/user-videos';
 
 const AMOUNT_TRENDING_VIDEOS = 12;
 
 export class HomeContent extends React.Component {
+  state = {
+    userVideos: [],
+  };
+
+  componentDidMount() {
+    listUserVideos(8)
+      .then(userVideos => this.setState({userVideos}))
+      .catch(() => this.setState({userVideos: []}));
+  }
+
   render() {
     const trendingVideos = this.getTrendingVideos();
     const categoryGrids = this.getVideoGridsForCategories();
@@ -16,6 +27,7 @@ export class HomeContent extends React.Component {
       <div className='home-content'>
         <div className="responsive-video-grid-container">
           <InfiniteScroll bottomReachedCallback={this.props.bottomReachedCallback} showLoader={this.props.showLoader}>
+            <VideoGrid title='Community uploads' videos={this.state.userVideos}/>
             <VideoGrid title='Trending' videos={trendingVideos}/>
             {categoryGrids}
           </InfiniteScroll>

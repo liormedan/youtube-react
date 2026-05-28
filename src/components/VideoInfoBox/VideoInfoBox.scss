@@ -23,13 +23,21 @@
     }
     .video-publication-date {
       font-size: 13px;
-      color: #707070;
+      color: $grey;
     }
   }
 
   .subscribe {
+    background: $brand-primary;
+    color: #fff;
     grid-row: 1 / 2;
     grid-column: 3 / 4;
+
+    &:hover,
+    &:focus {
+      background: $brand-primary-dark;
+      color: #fff;
+    }
   }
 
   .video-description {

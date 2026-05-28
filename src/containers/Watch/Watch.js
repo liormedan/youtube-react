@@ -9,13 +9,18 @@ import {getSearchParam} from '../../services/url';
 import {getChannelId} from '../../store/reducers/videos';
 import {getCommentNextPageToken} from '../../store/reducers/comments';
 import * as commentActions from '../../store/actions/comment';
+import {getUserVideo} from '../../services/user-videos';
 
 
 export class Watch extends React.Component {
+  state = {
+    customVideo: null,
+  };
+
   render() {
     const videoId = this.getVideoId();
     return (
-      <WatchContent videoId={videoId} channelId={this.props.channelId} bottomReachedCallback={this.fetchMoreComments}
+      <WatchContent videoId={videoId} channelId={this.props.channelId} customVideo={this.state.customVideo} bottomReachedCallback={this.fetchMoreComments}
                     nextPageToken={this.props.nextPageToken}/>
     );
   }
@@ -29,6 +34,8 @@ export class Watch extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.youtubeLibraryLoaded !== prevProps.youtubeLibraryLoaded) {
       this.fetchWatchContent();
+    } else if (this.props.location.search !== prevProps.location.search) {
+      this.fetchWatchContent();
     }
   }
 
@@ -40,7 +47,13 @@ export class Watch extends React.Component {
     const videoId = this.getVideoId();
     if (!videoId) {
       this.props.history.push('/');
+      return;
     }
+    if (videoId.startsWith('user_')) {
+      getUserVideo(videoId).then(customVideo => this.setState({customVideo}));
+      return;
+    }
+    this.setState({customVideo: null});
     this.props.fetchWatchDetails(videoId, this.props.channelId);
   }
 

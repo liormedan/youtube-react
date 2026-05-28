@@ -4,9 +4,32 @@
   we use this rule to tweak the SCSS
 */
 .ui.menu.top-menu {
+  background: $surface-panel;
   border: none;
+  box-shadow: 0 1px 0 rgba(50, 174, 232, 0.16);
+
   .logo {
     width: $sidebar-left-width;
+
+    .brand-link {
+      align-items: center;
+      color: $text-color-dark;
+      display: flex;
+      font-size: 18px;
+      font-weight: 700;
+      gap: 6px;
+      white-space: nowrap;
+
+      &:hover {
+        color: $text-color-dark;
+      }
+    }
+
+    .brand-icon {
+      color: $brand-primary;
+      font-size: 18px;
+      margin: 0;
+    }
   }
   .nav-container {
     flex-grow: 1;
@@ -19,10 +42,86 @@
       form {
         width: 100%;
       }
+
+      .ui.action.input {
+        input {
+          border-color: rgba(50, 174, 232, 0.32);
+
+          &:focus {
+            border-color: $brand-primary;
+          }
+        }
+
+        .button {
+          background: $brand-primary;
+          color: #fff;
+
+          &:hover,
+          &:focus {
+            background: $brand-primary-dark;
+            color: #fff;
+          }
+        }
+      }
     }
   }
 
+  .right.menu {
+    align-items: center;
+    gap: 4px;
+  }
+
+  .header-action {
+    align-items: center;
+    border-radius: 999px;
+    color: $text-color-dark;
+    display: inline-flex;
+    font-size: 13px;
+    font-weight: 700;
+    gap: 7px;
+    min-height: 36px;
+    padding: 8px 12px;
+    white-space: nowrap;
+  }
+
+  .header-action--upload {
+    background: linear-gradient(135deg, rgba($brand-primary, .18), rgba($brand-accent, .76));
+    box-shadow: 0 8px 22px rgba($brand-primary, .14);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: $text-color-dark;
+      transform: translateY(-1px);
+    }
+  }
+
+  .header-action--soon {
+    cursor: default;
+    opacity: .62;
+  }
+
+  .header-action__soon {
+    background: rgba($brand-primary, .1);
+    border: 1px solid rgba($brand-primary, .14);
+    border-radius: 999px;
+    color: $brand-primary-dark;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    padding: 2px 6px;
+    text-transform: uppercase;
+  }
+
   .header-icon {
-    color: #a0a0a0;
+    color: $brand-primary-dark;
+    font-size: 18px;
+    margin: 0;
+    opacity: 0.72;
+
+    &:hover {
+      color: $brand-primary;
+      opacity: 1;
+    }
   }
 }

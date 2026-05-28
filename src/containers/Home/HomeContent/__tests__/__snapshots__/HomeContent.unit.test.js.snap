@@ -12,6 +12,10 @@ exports[`HomeContent renders 1`] = `
       showLoader={true}
     >
       <VideoGrid
+        title="Community uploads"
+        videos={Array []}
+      />
+      <VideoGrid
         title="Trending"
         videos={Array []}
       />

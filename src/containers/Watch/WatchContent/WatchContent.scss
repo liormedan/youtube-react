@@ -1,8 +1,11 @@
+@import '../../../styles/shared.scss';
+
 .watch-grid {
   display: grid;
   grid-template: auto auto auto 1fr / minmax(0, 1280px) 402px;
   justify-content: center;
   padding-top: 24px;
+  background: $surface-bg;
   column-gap: 24px;
   grid-row-gap: 8px;
 

@@ -7,6 +7,11 @@
 
   form {
     flex: 1;
+
+    textarea {
+      background: $surface-panel;
+      border-color: rgba(50, 174, 232, 0.22);
+    }
   }
 
   .user-image {

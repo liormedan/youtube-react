@@ -1,0 +1,24 @@
+@import '../../styles/shared.scss';
+
+.activity-feed {
+  margin-left: $sidebar-left-width;
+  min-height: calc(100vh - #{$header-nav-height});
+  padding: 24px;
+
+  h2 {
+    color: $text-color-dark;
+    margin-bottom: 24px;
+
+    &:after {
+      background: $brand-accent;
+      content: '';
+      display: block;
+      height: 4px;
+      margin-top: 8px;
+      width: 52px;
+    }
+  }
+  .video-preview {
+    margin-bottom: 18px;
+  }
+}

@@ -7,7 +7,7 @@ export function SideBarFooter() {
       <div className='footer-block'>
         <div>About Press Copyright</div>
         <div>Creators Advertise</div>
-        <div>Developers +MyTube</div>
+        <div>Developers +medan-Tube</div>
         <div>Legal</div>
       </div>
       <div className='footer-block'>
@@ -19,7 +19,7 @@ export function SideBarFooter() {
         <div>All prices include VAT</div>
       </div>
       <div className='footer-block'>
-        <div>© Productioncoder.com - A Youtube clone for educational purposes under fair use.</div>
+        <div>medan-Tube - A local video app demo for educational purposes.</div>
       </div>
     </React.Fragment>
   );

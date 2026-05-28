@@ -1,11 +1,60 @@
 @import '../../styles/shared.scss';
 
 .app-layout {
+  background: $surface-bg;
+  color: $text-color-dark;
+  min-height: 100vh;
+
+  a {
+    color: inherit;
+  }
+
+  .ui.divider {
+    border-top-color: rgba(50, 174, 232, 0.16);
+  }
+
+  .ui.button {
+    border-radius: 4px;
+  }
+
+  .ui.basic.button {
+    color: $brand-primary-dark !important;
+
+    &:hover,
+    &:focus {
+      background: $brand-primary-soft !important;
+      color: $brand-primary-dark !important;
+    }
+  }
+
+  .ui.progress .bar {
+    background: $brand-primary;
+  }
+
+  .ui.toggle.checkbox input:checked ~ .box:before,
+  .ui.toggle.checkbox input:checked ~ label:before {
+    background-color: $brand-primary !important;
+  }
+
+  textarea,
+  input {
+    color: $text-color-dark;
+
+    &:focus {
+      border-color: $brand-primary !important;
+    }
+  }
+
   & > *:not(:first-child) {
     margin-top: $header-nav-height;
   }
 
   ::-webkit-scrollbar {
     width: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $brand-primary;
+    border-radius: 999px;
   }
 }

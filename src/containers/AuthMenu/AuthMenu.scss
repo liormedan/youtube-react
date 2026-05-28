@@ -1,0 +1,63 @@
+@import '../../styles/shared.scss';
+
+.auth-menu {
+  .auth-trigger {
+    background: $brand-primary-soft;
+    color: $brand-primary-dark;
+
+    &:hover,
+    &:focus {
+      background: $brand-primary;
+      color: #fff;
+    }
+  }
+
+  .menu {
+    min-width: 280px;
+  }
+}
+
+.auth-panel.item {
+  cursor: default;
+
+  &:hover {
+    background: #fff !important;
+  }
+
+  .auth-title {
+    color: $text-color-dark;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .auth-subtitle {
+    color: $grey;
+    font-size: 13px;
+  }
+
+  .auth-primary-button {
+    background: $brand-primary;
+    color: #fff;
+    margin-bottom: 8px;
+    width: 100%;
+
+    &:hover,
+    &:focus {
+      background: $brand-primary-dark;
+      color: #fff;
+    }
+  }
+
+  .google-button {
+    margin-bottom: 8px;
+    width: 100%;
+
+    .google.icon {
+      color: $brand-primary-dark;
+    }
+  }
+
+  .ui.basic.button {
+    width: 100%;
+  }
+}

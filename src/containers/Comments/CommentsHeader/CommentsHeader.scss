@@ -1,5 +1,8 @@
+@import '../../../styles/shared.scss';
+
 .comments-header {
     h4 {
+        color: $text-color-dark;
         display: inline-block;
         margin-right: 16px;
     }

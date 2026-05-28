@@ -1,3 +1,6 @@
+@import '../../../styles/shared.scss';
+
 .side-bar-header {
-  color: #6d6d6d;
+  color: $brand-primary-dark;
+  font-weight: 700;
 }

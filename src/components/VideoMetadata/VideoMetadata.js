@@ -21,11 +21,13 @@ export function VideoMetadata(props) {
             <Icon name='share'/>
             Share
           </Button>
-          <Button basic icon>
-            <Icon name='add circle' />
+          <Button basic icon labelPosition='left' disabled={!props.user} onClick={() => props.onSaveActivity('likedVideos')}>
+            <Icon name='thumbs up outline' />
+            Like
           </Button>
-          <Button basic icon>
-            <Icon name='ellipsis horizontal' />
+          <Button basic icon labelPosition='left' disabled={!props.user} onClick={() => props.onSaveActivity('watchLater')}>
+            <Icon name='clock outline' />
+            Watch later
           </Button>
         </div>
       </div>

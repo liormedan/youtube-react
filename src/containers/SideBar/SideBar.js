@@ -15,12 +15,13 @@ export class SideBar extends React.Component {
         <SideBarItem label='Followers' icon='spy'/>
         <Divider/>
         <SideBarHeader title='Library'/>
-        <SideBarItem label='History' icon='history'/>
-        <SideBarItem label='Watch later' icon='clock'/>
-        <SideBarItem label='Liked videos' icon='thumbs up'/>
+        <SideBarItem path='/library/history' label='History' icon='history'/>
+        <SideBarItem path='/library/watch-later' label='Watch later' icon='clock'/>
+        <SideBarItem path='/library/liked' label='Liked videos' icon='thumbs up'/>
+        <SideBarItem path='/studio/videos' label='Upload links' icon='cloud upload'/>
         <Divider/>
         <Subscriptions/>
-        <SideBarHeader title='More from Youtube'/>
+        <SideBarHeader title='More from medan-Tube'/>
         <SideBarItem label='Movies and Shows' icon='film'/>
         <Divider/>
         <SideBarItem label='Report history' icon='flag'/>
