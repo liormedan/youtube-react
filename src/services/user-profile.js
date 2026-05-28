@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import {firestore, toAuthUser} from './firebase';
+import {auth, firestore, toAuthUser} from './firebase';
 
 export function upsertUserProfile(user, overrides = {}) {
   if (!firestore || !user) {
@@ -25,8 +25,33 @@ export function upsertUserProfile(user, overrides = {}) {
       profile.createdAt = now;
     }
 
+    if (Object.prototype.hasOwnProperty.call(overrides, 'bio')) {
+      profile.bio = overrides.bio;
+    }
+
     return userRef.set(profile, {merge: true}).then(() => authUser);
   });
+}
+
+export function updateCurrentUserProfile(input) {
+  if (!firestore || !auth || !auth.currentUser) {
+    return Promise.reject(new Error('You must be signed in to update your profile.'));
+  }
+
+  const displayName = (input.displayName || '').trim();
+  const photoURL = (input.photoURL || '').trim();
+  const bio = (input.bio || '').trim();
+
+  return auth.currentUser.updateProfile({
+    displayName,
+    photoURL: photoURL || null,
+  }).then(() => (
+    upsertUserProfile(auth.currentUser, {
+      bio,
+      displayName,
+      photoURL: photoURL || null,
+    })
+  ));
 }
 
 export function getUserProfile(uid) {

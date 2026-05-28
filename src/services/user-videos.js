@@ -15,6 +15,14 @@ function userUploadsCollection(uid) {
   return firestore.collection('users').doc(uid).collection('uploads');
 }
 
+function normalizeVideoId(videoId) {
+  if (!videoId) {
+    return null;
+  }
+
+  return videoId.startsWith('user_') ? videoId.replace('user_', '') : videoId;
+}
+
 function extractYoutubeId(url) {
   const patterns = [
     /youtu\.be\/([^?&/]+)/,
@@ -86,6 +94,13 @@ function toVideo(doc) {
       duration: null,
     },
     isUserVideo: true,
+    management: {
+      ownerUid: data.ownerUid,
+      sourceType: data.sourceType,
+      sourceUrl: data.sourceUrl,
+      videoId: data.videoId || doc.id,
+      visibility: data.visibility || 'public',
+    },
     snippet: {
       channelId: data.ownerUid,
       channelTitle: data.ownerDisplayName || 'medan-Tube creator',
@@ -110,6 +125,29 @@ function toVideo(doc) {
   };
 }
 
+function buildVideoPayload(user, input, overrides = {}) {
+  const title = (input.title || '').trim();
+  const sourceUrl = (input.sourceUrl || '').trim();
+  const source = parseVideoSource(sourceUrl);
+
+  return {
+    createdAt: overrides.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+    description: (input.description || '').trim(),
+    embedUrl: source.embedUrl,
+    ownerDisplayName: user.displayName || user.email || 'medan-Tube creator',
+    ownerPhotoURL: user.photoURL || null,
+    ownerUid: user.uid,
+    sourceId: source.sourceId,
+    sourceType: source.sourceType,
+    sourceUrl: source.sourceUrl,
+    thumbnail: source.thumbnail,
+    title,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    videoId: overrides.videoId,
+    visibility: overrides.visibility || 'public',
+  };
+}
+
 export function createUserVideo(user, input) {
   const collection = videosCollection();
   const uploadsCollection = userUploadsCollection(user && user.uid);
@@ -123,23 +161,8 @@ export function createUserVideo(user, input) {
     return Promise.reject(new Error('Title and video link are required.'));
   }
 
-  const source = parseVideoSource(sourceUrl);
   const videoRef = collection.doc();
-  const videoPayload = {
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    description: (input.description || '').trim(),
-    embedUrl: source.embedUrl,
-    ownerDisplayName: user.displayName || user.email || 'medan-Tube creator',
-    ownerEmail: user.email || '',
-    ownerPhotoURL: user.photoURL || null,
-    ownerUid: user.uid,
-    sourceId: source.sourceId,
-    sourceType: source.sourceType,
-    sourceUrl: source.sourceUrl,
-    thumbnail: source.thumbnail,
-    title,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  };
+  const videoPayload = buildVideoPayload(user, input, {videoId: videoRef.id});
 
   const batch = firestore.batch();
   batch.set(videoRef, videoPayload);
@@ -177,13 +200,64 @@ export function listVideosByOwner(uid, limit = 24) {
   );
 }
 
+export function updateUserVideo(user, videoId, input) {
+  const normalizedVideoId = normalizeVideoId(videoId);
+  const uploadsRef = userUploadsCollection(user && user.uid);
+  const publicCollection = videosCollection();
+  if (!uploadsRef || !publicCollection || !normalizedVideoId || !user) {
+    return Promise.reject(new Error('You must be signed in to edit this upload.'));
+  }
+
+  const title = (input.title || '').trim();
+  const sourceUrl = (input.sourceUrl || '').trim();
+  if (!title || !sourceUrl) {
+    return Promise.reject(new Error('Title and video link are required.'));
+  }
+
+  const ownerRef = uploadsRef.doc(normalizedVideoId);
+  const publicRef = publicCollection.doc(normalizedVideoId);
+
+  return ownerRef.get().then((snapshot) => {
+    if (!snapshot.exists) {
+      throw new Error('This upload no longer exists in your profile.');
+    }
+
+    const existing = snapshot.data();
+    const payload = buildVideoPayload(user, input, {
+      createdAt: existing.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+      videoId: normalizedVideoId,
+      visibility: existing.visibility || 'public',
+    });
+
+    const batch = firestore.batch();
+    batch.set(ownerRef, payload);
+    batch.set(publicRef, payload);
+    return batch.commit();
+  });
+}
+
+export function deleteUserVideo(user, videoId) {
+  const normalizedVideoId = normalizeVideoId(videoId);
+  const uploadsRef = userUploadsCollection(user && user.uid);
+  const publicCollection = videosCollection();
+  if (!uploadsRef || !publicCollection || !normalizedVideoId || !user) {
+    return Promise.reject(new Error('You must be signed in to delete this upload.'));
+  }
+
+  const batch = firestore.batch();
+  batch.delete(uploadsRef.doc(normalizedVideoId));
+  batch.delete(publicCollection.doc(normalizedVideoId));
+  return batch.commit();
+}
+
 export function getUserVideo(videoId) {
   const collection = videosCollection();
-  if (!collection || !videoId || !videoId.startsWith('user_')) {
+  const normalizedVideoId = normalizeVideoId(videoId);
+  if (!collection || !normalizedVideoId) {
     return Promise.resolve(null);
   }
 
-  return collection.doc(videoId.replace('user_', '')).get().then(doc => {
+  return collection.doc(normalizedVideoId).get().then(doc => {
     if (!doc.exists) {
       return null;
     }

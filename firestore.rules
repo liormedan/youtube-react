@@ -1,6 +1,10 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function hasOnlyKeys(data, allowed) {
+      return data.keys().hasOnly(allowed);
+    }
+
     function isSignedIn() {
       return request.auth != null;
     }
@@ -9,21 +13,93 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
+    function isValidUserProfile(uid) {
+      return hasOnlyKeys(request.resource.data, [
+        'bio',
+        'createdAt',
+        'displayName',
+        'email',
+        'lastLoginAt',
+        'photoURL',
+        'providerId',
+        'uid',
+        'updatedAt',
+      ]) && request.resource.data.uid == uid;
+    }
+
+    function isValidManagedVideo(ownerUid, videoId) {
+      return hasOnlyKeys(request.resource.data, [
+        'createdAt',
+        'description',
+        'embedUrl',
+        'ownerDisplayName',
+        'ownerPhotoURL',
+        'ownerUid',
+        'sourceId',
+        'sourceType',
+        'sourceUrl',
+        'thumbnail',
+        'title',
+        'updatedAt',
+        'videoId',
+        'visibility',
+      ])
+      && request.resource.data.ownerUid == ownerUid
+      && request.resource.data.videoId == videoId
+      && request.resource.data.visibility == 'public';
+    }
+
+    function isValidUserActivity() {
+      return hasOnlyKeys(request.resource.data, [
+        'channelId',
+        'channelTitle',
+        'description',
+        'duration',
+        'likeCount',
+        'thumbnail',
+        'title',
+        'updatedAt',
+        'videoId',
+        'viewCount',
+        'watchedAt',
+      ]);
+    }
+
     match /users/{uid} {
-      allow read, create, update: if isOwner(uid);
+      allow read, create, update: if isOwner(uid) && isValidUserProfile(uid);
       allow delete: if false;
 
-      match /{collectionName}/{docId} {
-        allow read, create, update, delete: if isOwner(uid);
+      match /uploads/{videoId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && isValidManagedVideo(uid, videoId);
+        allow delete: if isOwner(uid);
+      }
+
+      match /history/{videoId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && isValidUserActivity();
+        allow delete: if isOwner(uid);
+      }
+
+      match /watchLater/{videoId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && isValidUserActivity();
+        allow delete: if isOwner(uid);
+      }
+
+      match /liked/{videoId} {
+        allow read: if isOwner(uid);
+        allow create, update: if isOwner(uid) && isValidUserActivity();
+        allow delete: if isOwner(uid);
       }
     }
 
     match /videos/{videoId} {
       allow read: if true;
-      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow create: if isSignedIn() && isValidManagedVideo(request.auth.uid, videoId);
       allow update: if isSignedIn()
         && resource.data.ownerUid == request.auth.uid
-        && request.resource.data.ownerUid == request.auth.uid;
+        && isValidManagedVideo(request.auth.uid, videoId);
       allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
     }
   }
