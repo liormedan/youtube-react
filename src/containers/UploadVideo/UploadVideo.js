@@ -70,6 +70,9 @@ class UploadVideo extends React.Component {
           <h3>Upload details</h3>
           <p>Use a public YouTube, Google Drive, or direct video URL. Published items will appear on Home and in your profile library.</p>
         </div>
+        <Message info>
+          File storage uploads are not supported yet. Publish links only; Google Drive files must be shared with anyone who has the link.
+        </Message>
         <Form.Input
           label='Title'
           name='title'

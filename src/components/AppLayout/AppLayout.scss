@@ -57,4 +57,84 @@
     background: $brand-primary;
     border-radius: 999px;
   }
+
+  &--dark {
+    background: #0f172a;
+    color: #e5eef5;
+
+    .ui.menu.top-menu {
+      background: #111c31;
+      box-shadow: 0 1px 0 rgba(148, 163, 184, .18);
+
+      .logo .brand-link,
+      .header-action {
+        color: #e5eef5;
+
+        &:hover,
+        &:focus {
+          color: #fff;
+        }
+      }
+
+      .search-input .ui.action.input input {
+        background: #0f172a;
+        border-color: rgba(148, 163, 184, .32);
+        color: #e5eef5;
+      }
+    }
+
+    .ui.menu.fixed.side-nav {
+      background-color: #111c31;
+      box-shadow: inset -1px 0 0 rgba(148, 163, 184, .18);
+    }
+
+    .side-nav.ui.menu,
+    .side-nav.ui.menu .item,
+    .ui.vertical.menu .item {
+      color: #d7e2ea;
+    }
+
+    .sidebar-item.highlight-item,
+    .sidebar-item:hover,
+    .subscription:hover {
+      background: rgba(50, 174, 232, .16);
+    }
+
+    .ui.segment,
+    .ui.message,
+    .ui.form,
+    .creator-profile-page__panel,
+    .creator-profile-page__stat,
+    .creator-profile-page__video-item,
+    .upload-video-page__form,
+    .upload-video-page__profile-link {
+      background: #172033;
+      border-color: rgba(148, 163, 184, .22);
+      color: #e5eef5;
+    }
+
+    .ui.form .field > label,
+    .ui.checkbox label,
+    .creator-profile-page h2,
+    .creator-profile-page h3,
+    .creator-profile-page__stat strong,
+    .upload-video-page h2,
+    .upload-video-page h3 {
+      color: #e5eef5;
+    }
+
+    .creator-profile-page p,
+    .upload-video-page p,
+    .creator-profile-page__stat span,
+    .creator-profile-page__list-heading span {
+      color: #a8b8c4;
+    }
+
+    textarea,
+    input {
+      background: #0f172a !important;
+      border-color: rgba(148, 163, 184, .28) !important;
+      color: #e5eef5 !important;
+    }
+  }
 }

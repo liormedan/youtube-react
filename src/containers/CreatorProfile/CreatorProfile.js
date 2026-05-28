@@ -1,11 +1,14 @@
 import React from 'react';
-import {Button, Form, Image, Message} from 'semantic-ui-react';
+import {Button, Form, Icon, Image, Label, Message} from 'semantic-ui-react';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import {SideBar} from '../SideBar/SideBar';
 import {VideoPreview} from '../../components/VideoPreview/VideoPreview';
 import {getCurrentUser, getFirebaseConfigured} from '../../store/reducers/auth';
-import {deleteUserVideo, listVideosByOwner, updateUserVideo} from '../../services/user-videos';
+import {auth} from '../../services/firebase';
+import {authStateChanged} from '../../store/actions/auth';
+import {createUserVideo, deleteUserVideo, listVideosByOwner, parseVideoSource, updateUserVideo} from '../../services/user-videos';
 import {getUserProfile, updateCurrentUserProfile} from '../../services/user-profile';
 import './CreatorProfile.scss';
 
@@ -17,6 +20,7 @@ class CreatorProfile extends React.Component {
       bio: '',
       displayName: '',
       photoURL: '',
+      theme: 'light',
     },
     profileSaving: false,
     loading: true,
@@ -27,6 +31,12 @@ class CreatorProfile extends React.Component {
       sourceUrl: '',
       title: '',
     },
+    uploadDraft: {
+      description: '',
+      sourceUrl: '',
+      title: '',
+    },
+    uploadSaving: false,
     videoSaving: false,
     videoSuccess: null,
     videos: [],
@@ -64,6 +74,7 @@ class CreatorProfile extends React.Component {
 
     const profile = this.state.profile || this.props.user;
     const avatar = profile.photoURL || this.props.user.photoURL;
+    const providerId = profile.providerId || this.props.user.providerId || 'password';
 
     return (
       <React.Fragment>
@@ -72,16 +83,23 @@ class CreatorProfile extends React.Component {
             {avatar ? <Image avatar className='creator-profile-page__avatar' src={avatar}/> : <div className='creator-profile-page__avatar creator-profile-page__avatar--placeholder'/>}
             <div>
               <span className='creator-profile-page__eyebrow'>Creator profile</span>
-              <h2>{profile.displayName || profile.email || 'medan-Tube creator'}</h2>
+              <h2>{profile.displayName || profile.email || 'Profile and studio settings'}</h2>
               <p>{profile.email || 'Signed-in creator account'}</p>
             </div>
           </div>
-          <Link to='/studio/upload'>
-            <Button className='creator-profile-page__cta'>+ New upload</Button>
-          </Link>
+          <div className='creator-profile-page__hero-actions'>
+            <Label className='creator-profile-page__status' basic>
+              <Icon name='check circle'/>
+              Connected
+            </Label>
+            <Link to='/studio/upload'>
+              <Button className='creator-profile-page__cta'>Quick upload</Button>
+            </Link>
+          </div>
         </div>
 
-        {this.renderProfileForm(profile)}
+        {this.renderConnectionCard(profile, providerId)}
+        {this.renderProfileForm()}
         <div className='creator-profile-page__stats'>
           <div className='creator-profile-page__stat'>
             <span>Uploads</span>
@@ -91,12 +109,17 @@ class CreatorProfile extends React.Component {
             <span>Profile status</span>
             <strong>{this.state.videos.length ? 'Active' : 'Ready to publish'}</strong>
           </div>
+          <div className='creator-profile-page__stat'>
+            <span>Interface</span>
+            <strong>{this.state.profileDraft.theme === 'dark' ? 'Dark' : 'Light'}</strong>
+          </div>
         </div>
 
         {this.state.error && <Message error content={this.state.error}/>}
         {this.state.profileSuccess && <Message success content={this.state.profileSuccess}/>}
         {this.state.videoSuccess && <Message success content={this.state.videoSuccess}/>}
 
+        {this.renderUploadManager()}
         <div className='creator-profile-page__list'>
           <div className='creator-profile-page__list-heading'>
             <h3>Your uploads</h3>
@@ -109,6 +132,7 @@ class CreatorProfile extends React.Component {
           )}
           {this.state.videos.map(video => (
             <div className='creator-profile-page__video-item' key={video.id}>
+              {this.renderSourceBadge(video)}
               <VideoPreview
                 expanded={true}
                 horizontal={true}
@@ -128,7 +152,36 @@ class CreatorProfile extends React.Component {
     );
   }
 
-  renderProfileForm(profile) {
+  renderConnectionCard(profile, providerId) {
+    return (
+      <div className='creator-profile-page__panel creator-profile-page__connection'>
+        <div className='creator-profile-page__panel-heading'>
+          <h3>Account connection</h3>
+          <p>Your profile is tied to the signed-in Firebase account.</p>
+        </div>
+        <div className='creator-profile-page__connection-grid'>
+          <div>
+            <span>Email</span>
+            <strong>{profile.email || this.props.user.email || 'No email'}</strong>
+          </div>
+          <div>
+            <span>Provider</span>
+            <strong>{this.providerLabel(providerId)}</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong>Connected</strong>
+          </div>
+        </div>
+        <Button basic onClick={this.handleSignOut} type='button'>
+          <Icon name='sign-out'/>
+          Sign out
+        </Button>
+      </div>
+    );
+  }
+
+  renderProfileForm() {
     return (
       <Form className='creator-profile-page__panel' onSubmit={this.handleProfileSubmit}>
         <div className='creator-profile-page__panel-heading'>
@@ -153,7 +206,75 @@ class CreatorProfile extends React.Component {
           onChange={this.handleProfileDraftChange}
           value={this.state.profileDraft.bio}
         />
+        <div className='creator-profile-page__theme-control'>
+          <div>
+            <h4>Interface theme</h4>
+            <p>Saved to your account and applied after every sign in.</p>
+          </div>
+          <div className='creator-profile-page__theme-buttons' role='group' aria-label='Interface theme'>
+            <Button
+              active={this.state.profileDraft.theme === 'light'}
+              basic={this.state.profileDraft.theme !== 'light'}
+              onClick={() => this.setTheme('light')}
+              type='button'>
+              <Icon name='sun'/>
+              Light
+            </Button>
+            <Button
+              active={this.state.profileDraft.theme === 'dark'}
+              basic={this.state.profileDraft.theme !== 'dark'}
+              onClick={() => this.setTheme('dark')}
+              type='button'>
+              <Icon name='moon'/>
+              Dark
+            </Button>
+          </div>
+        </div>
         <Button className='creator-profile-page__cta' loading={this.state.profileSaving} type='submit'>Save profile</Button>
+      </Form>
+    );
+  }
+
+  renderUploadManager() {
+    const source = parseVideoSource(this.state.uploadDraft.sourceUrl);
+
+    return (
+      <Form className='creator-profile-page__panel' error={Boolean(this.state.error)} onSubmit={this.handleCreateVideoSubmit}>
+        <div className='creator-profile-page__panel-heading'>
+          <h3>Publish a link</h3>
+          <p>Manage link-based uploads from your profile. Storage uploads are not supported yet.</p>
+        </div>
+        <Message info>
+          medan-Tube does not store uploaded files right now. Publish public YouTube links, public Google Drive links, or direct video URLs. Google Drive files must be shared with anyone who has the link.
+        </Message>
+        <Form.Input
+          label='Title'
+          name='title'
+          onChange={this.handleUploadDraftChange}
+          placeholder='Video title'
+          required
+          value={this.state.uploadDraft.title}
+        />
+        <Form.Input
+          label='Video, Drive, or public media link'
+          name='sourceUrl'
+          onChange={this.handleUploadDraftChange}
+          placeholder='https://youtu.be/... or https://drive.google.com/file/d/...'
+          required
+          value={this.state.uploadDraft.sourceUrl}
+        />
+        <div className='creator-profile-page__source-preview'>
+          <span>Detected source</span>
+          {this.renderSourceTypeBadge(source.sourceType)}
+        </div>
+        <Form.TextArea
+          label='Description'
+          name='description'
+          onChange={this.handleUploadDraftChange}
+          placeholder='Tell viewers what this upload is about'
+          value={this.state.uploadDraft.description}
+        />
+        <Button className='creator-profile-page__cta' loading={this.state.uploadSaving} type='submit'>Publish link</Button>
       </Form>
     );
   }
@@ -179,6 +300,10 @@ class CreatorProfile extends React.Component {
           required
           value={this.state.videoDraft.sourceUrl}
         />
+        <div className='creator-profile-page__source-preview'>
+          <span>Detected source</span>
+          {this.renderSourceTypeBadge(parseVideoSource(this.state.videoDraft.sourceUrl).sourceType)}
+        </div>
         <Form.TextArea
           label='Description'
           name='description'
@@ -193,6 +318,30 @@ class CreatorProfile extends React.Component {
     );
   }
 
+  renderSourceBadge(video) {
+    const sourceType = (video.management && video.management.sourceType) || video.snippet.sourceType || 'link';
+    return (
+      <div className='creator-profile-page__video-badge'>
+        {this.renderSourceTypeBadge(sourceType)}
+      </div>
+    );
+  }
+
+  renderSourceTypeBadge(sourceType) {
+    const labels = {
+      direct: 'Direct video URL',
+      drive: 'Google Drive',
+      link: 'External link',
+      youtube: 'YouTube',
+    };
+
+    return (
+      <Label className={`creator-profile-page__source-label creator-profile-page__source-label--${sourceType || 'link'}`}>
+        {labels[sourceType] || labels.link}
+      </Label>
+    );
+  }
+
   handleProfileDraftChange = (event, data) => {
     this.setState(({profileDraft}) => ({
       profileDraft: {
@@ -200,6 +349,16 @@ class CreatorProfile extends React.Component {
         [data.name]: data.value,
       },
       profileSuccess: null,
+    }));
+  };
+
+  handleUploadDraftChange = (event, data) => {
+    this.setState(({uploadDraft}) => ({
+      uploadDraft: {
+        ...uploadDraft,
+        [data.name]: data.value,
+      },
+      videoSuccess: null,
     }));
   };
 
@@ -216,11 +375,30 @@ class CreatorProfile extends React.Component {
   handleProfileSubmit = () => {
     this.setState({error: null, profileSaving: true, profileSuccess: null});
     updateCurrentUserProfile(this.state.profileDraft)
-      .then(() => this.setState({
+      .then((profile) => {
+        this.props.authStateChanged(profile);
+        return this.setState({
+          profile,
         profileSaving: false,
         profileSuccess: 'Profile updated. Your private profile document now reflects the new values.',
-      }, () => this.loadProfile()))
+        }, () => this.loadProfile());
+      })
       .catch(error => this.setState({error: error.message, profileSaving: false}));
+  };
+
+  handleCreateVideoSubmit = () => {
+    this.setState({error: null, uploadSaving: true, videoSuccess: null});
+    createUserVideo(this.props.user, this.state.uploadDraft)
+      .then(() => this.setState({
+        uploadDraft: {
+          description: '',
+          sourceUrl: '',
+          title: '',
+        },
+        uploadSaving: false,
+        videoSuccess: 'Link published to your profile and the public feed.',
+      }, () => this.loadProfile()))
+      .catch(error => this.setState({error: error.message, uploadSaving: false}));
   };
 
   startEditingVideo(video) {
@@ -272,6 +450,32 @@ class CreatorProfile extends React.Component {
       .catch(error => this.setState({error: error.message}));
   }
 
+  handleSignOut = () => {
+    auth.signOut();
+  };
+
+  setTheme(theme) {
+    this.setState(({profileDraft}) => ({
+      profileDraft: {
+        ...profileDraft,
+        theme,
+      },
+      profileSuccess: null,
+    }));
+  }
+
+  providerLabel(providerId) {
+    if (providerId === 'google.com') {
+      return 'Google';
+    }
+
+    if (providerId === 'password') {
+      return 'Email and password';
+    }
+
+    return providerId || 'Firebase Auth';
+  }
+
   loadProfile() {
     if (!this.props.user) {
       this.setState({error: null, loading: false, profile: null, videos: []});
@@ -290,6 +494,7 @@ class CreatorProfile extends React.Component {
           bio: (profile && profile.bio) || '',
           displayName: (profile && profile.displayName) || this.props.user.displayName || '',
           photoURL: (profile && profile.photoURL) || this.props.user.photoURL || '',
+          theme: (profile && profile.theme) || this.props.user.theme || 'light',
         },
         videos,
       }))
@@ -304,4 +509,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(CreatorProfile);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({authStateChanged}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreatorProfile);

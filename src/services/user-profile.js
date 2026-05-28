@@ -29,7 +29,19 @@ export function upsertUserProfile(user, overrides = {}) {
       profile.bio = overrides.bio;
     }
 
-    return userRef.set(profile, {merge: true}).then(() => authUser);
+    if (Object.prototype.hasOwnProperty.call(overrides, 'theme')) {
+      profile.theme = overrides.theme;
+    } else if (snapshot.exists && snapshot.data().theme) {
+      profile.theme = snapshot.data().theme;
+    } else {
+      profile.theme = 'light';
+    }
+
+    return userRef.set(profile, {merge: true}).then(() => ({
+      ...authUser,
+      bio: profile.bio || (snapshot.exists && snapshot.data().bio) || '',
+      theme: profile.theme,
+    }));
   });
 }
 
@@ -41,6 +53,7 @@ export function updateCurrentUserProfile(input) {
   const displayName = (input.displayName || '').trim();
   const photoURL = (input.photoURL || '').trim();
   const bio = (input.bio || '').trim();
+  const theme = input.theme === 'dark' ? 'dark' : 'light';
 
   return auth.currentUser.updateProfile({
     displayName,
@@ -50,6 +63,7 @@ export function updateCurrentUserProfile(input) {
       bio,
       displayName,
       photoURL: photoURL || null,
+      theme,
     })
   ));
 }

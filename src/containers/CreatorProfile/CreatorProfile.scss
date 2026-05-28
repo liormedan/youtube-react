@@ -19,6 +19,21 @@
     padding: 28px;
   }
 
+  &__hero-actions {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+  }
+
+  &__status.ui.label {
+    align-items: center;
+    border-color: rgba($brand-primary, .22);
+    color: $brand-primary-dark;
+    display: inline-flex;
+    gap: 6px;
+    min-height: 36px;
+  }
+
   &__identity {
     align-items: center;
     display: flex;
@@ -64,8 +79,9 @@
   &__stats {
     display: grid;
     gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     margin-bottom: 22px;
+    max-width: 960px;
   }
 
   &__panel {
@@ -76,6 +92,41 @@
     margin-bottom: 22px;
     max-width: 960px;
     padding: 22px;
+  }
+
+  &__connection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__connection-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    div {
+      background: rgba($brand-primary-soft, .72);
+      border: 1px solid rgba($brand-primary, .12);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    span {
+      color: $grey;
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    strong {
+      color: $text-color-dark;
+      display: block;
+      overflow-wrap: anywhere;
+    }
   }
 
   &__panel--video {
@@ -142,13 +193,143 @@
   }
 
   &__video-item {
+    background: #fff;
+    border: 1px solid rgba($brand-primary, .12);
+    border-radius: 14px;
     margin-bottom: 18px;
+    padding: 14px;
   }
 
   &__video-actions,
   &__editor-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 10px;
+  }
+
+  &__theme-control {
+    align-items: center;
+    border: 1px solid rgba($brand-primary, .14);
+    border-radius: 12px;
+    display: flex;
+    gap: 18px;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding: 16px;
+
+    h4 {
+      color: $text-color-dark;
+      margin: 0 0 4px;
+    }
+
+    p {
+      color: $grey;
+      margin: 0;
+    }
+  }
+
+  &__theme-buttons {
+    display: flex;
+    gap: 8px;
+
+    .ui.button.active {
+      background: $brand-primary;
+      color: #fff;
+    }
+  }
+
+  &__source-preview {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    margin: -2px 0 16px;
+
+    span {
+      color: $grey;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+  }
+
+  &__video-badge {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+  }
+
+  &__source-label.ui.label {
+    border-radius: 999px;
+    font-weight: 800;
+  }
+
+  &__source-label--youtube.ui.label {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  &__source-label--drive.ui.label {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  &__source-label--direct.ui.label {
+    background: #e0f2fe;
+    color: #075985;
+  }
+
+  &__source-label--link.ui.label {
+    background: #fef9c3;
+    color: #854d0e;
+  }
+}
+
+.app-layout--dark {
+  .creator-profile-page {
+    &__hero {
+      background:
+        radial-gradient(circle at 82% 18%, rgba($brand-primary, .22), transparent 24%),
+        linear-gradient(135deg, rgba(15, 23, 42, .94), rgba(22, 125, 168, .26));
+      border-color: rgba(148, 163, 184, .22);
+    }
+
+    &__connection-grid div,
+    &__theme-control {
+      background: rgba(15, 23, 42, .58);
+      border-color: rgba(148, 163, 184, .2);
+    }
+
+    &__connection-grid strong,
+    &__theme-control h4 {
+      color: #e5eef5;
+    }
+
+    &__source-label--youtube.ui.label,
+    &__source-label--drive.ui.label,
+    &__source-label--direct.ui.label,
+    &__source-label--link.ui.label {
+      background: rgba(50, 174, 232, .18);
+      color: #d7f4ff;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .creator-profile-page {
+    margin-left: 0;
+    padding: 16px;
+
+    &__hero,
+    &__theme-control {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    &__hero-actions,
+    &__theme-buttons {
+      justify-content: flex-start;
+    }
   }
 }
