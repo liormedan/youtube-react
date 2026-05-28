@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Dropdown, Form, Icon, Image, Message} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {Link} from 'react-router-dom';
 import {auth, googleProvider} from '../../services/firebase';
 import {getAuthError, getCurrentUser, getFirebaseConfigured} from '../../store/reducers/auth';
 import {authStateChanged} from '../../store/actions/auth';
@@ -128,6 +129,14 @@ class AuthMenu extends React.Component {
         <Dropdown.Item className='auth-panel'>
           <div className='auth-title'>{this.props.user.displayName || this.props.user.email}</div>
           <div className='auth-subtitle'>Activity saves to Firebase</div>
+        </Dropdown.Item>
+        <Dropdown.Item as={Link} to='/studio/profile'>
+          <Icon name='user'/>
+          My profile
+        </Dropdown.Item>
+        <Dropdown.Item as={Link} to='/studio/upload'>
+          <Icon name='plus circle'/>
+          New upload
         </Dropdown.Item>
         <Dropdown.Item onClick={this.onSignOut}>
           <Icon name='sign-out'/>

@@ -46,8 +46,8 @@ export class HeaderNav extends React.Component {
           {/* 5 */}
           <Menu.Menu position='right'>
             <Menu.Item>
-              <Link to='/studio/videos' className='header-action header-action--upload' aria-label='Upload video link'>
-                <Icon className='header-icon' name='video camera'/>
+              <Link to='/studio/upload' className='header-action header-action--upload' aria-label='Create upload'>
+                <span className='header-action__plus'>+</span>
                 <span>Upload</span>
               </Link>
             </Menu.Item>

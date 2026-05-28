@@ -1,0 +1,117 @@
+@import '../../styles/shared.scss';
+
+.creator-profile-page {
+  margin-left: $sidebar-left-width;
+  min-height: calc(100vh - #{$header-nav-height});
+  padding: 24px;
+
+  &__hero {
+    align-items: center;
+    background:
+      radial-gradient(circle at 82% 18%, rgba($brand-accent, .44), transparent 24%),
+      linear-gradient(135deg, rgba($brand-primary, .16), rgba($brand-accent, .12));
+    border: 1px solid rgba($brand-primary, .16);
+    border-radius: 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 22px;
+    padding: 28px;
+  }
+
+  &__identity {
+    align-items: center;
+    display: flex;
+    gap: 18px;
+
+    h2 {
+      color: $text-color-dark;
+      font-size: 32px;
+      margin: 4px 0 8px;
+    }
+
+    p {
+      color: $grey;
+      margin: 0;
+    }
+  }
+
+  &__avatar {
+    height: 72px !important;
+    min-width: 72px;
+    width: 72px !important;
+  }
+
+  &__avatar--placeholder {
+    background: linear-gradient(135deg, rgba($brand-primary, .2), rgba($brand-accent, .5));
+    border-radius: 50%;
+  }
+
+  &__eyebrow {
+    color: $brand-primary-dark;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  &__cta.ui.button {
+    background: linear-gradient(135deg, $brand-primary, $brand-accent);
+    color: $text-color-dark;
+    font-weight: 800;
+  }
+
+  &__stats {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
+    margin-bottom: 22px;
+  }
+
+  &__stat {
+    background: #fff;
+    border: 1px solid rgba($brand-primary, .14);
+    border-radius: 18px;
+    padding: 18px 20px;
+
+    span {
+      color: $grey;
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    strong {
+      color: $text-color-dark;
+      font-size: 28px;
+    }
+  }
+
+  &__list {
+    max-width: 960px;
+
+    .video-preview {
+      margin-bottom: 18px;
+    }
+  }
+
+  &__list-heading {
+    align-items: baseline;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+
+    h3 {
+      color: $text-color-dark;
+      margin: 0;
+    }
+
+    span {
+      color: $grey;
+      font-weight: 700;
+    }
+  }
+}

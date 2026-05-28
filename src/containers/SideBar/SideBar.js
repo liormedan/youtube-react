@@ -18,7 +18,8 @@ export class SideBar extends React.Component {
         <SideBarItem path='/library/history' label='History' icon='history'/>
         <SideBarItem path='/library/watch-later' label='Watch later' icon='clock'/>
         <SideBarItem path='/library/liked' label='Liked videos' icon='thumbs up'/>
-        <SideBarItem path='/studio/videos' label='Upload links' icon='cloud upload'/>
+        <SideBarItem path='/studio/upload' label='New upload' icon='plus circle'/>
+        <SideBarItem path='/studio/profile' label='My profile' icon='user circle'/>
         <Divider/>
         <Subscriptions/>
         <SideBarHeader title='More from medan-Tube'/>

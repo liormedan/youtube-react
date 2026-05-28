@@ -7,6 +7,14 @@ function videosCollection() {
   return firestore ? firestore.collection('videos') : null;
 }
 
+function userUploadsCollection(uid) {
+  if (!firestore || !uid) {
+    return null;
+  }
+
+  return firestore.collection('users').doc(uid).collection('uploads');
+}
+
 function extractYoutubeId(url) {
   const patterns = [
     /youtu\.be\/([^?&/]+)/,
@@ -104,7 +112,8 @@ function toVideo(doc) {
 
 export function createUserVideo(user, input) {
   const collection = videosCollection();
-  if (!collection || !user) {
+  const uploadsCollection = userUploadsCollection(user && user.uid);
+  if (!collection || !uploadsCollection || !user) {
     return Promise.reject(new Error('Firebase sign-in is required to add a video.'));
   }
 
@@ -115,11 +124,13 @@ export function createUserVideo(user, input) {
   }
 
   const source = parseVideoSource(sourceUrl);
-  return collection.add({
+  const videoRef = collection.doc();
+  const videoPayload = {
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     description: (input.description || '').trim(),
     embedUrl: source.embedUrl,
     ownerDisplayName: user.displayName || user.email || 'medan-Tube creator',
+    ownerEmail: user.email || '',
     ownerPhotoURL: user.photoURL || null,
     ownerUid: user.uid,
     sourceId: source.sourceId,
@@ -128,7 +139,16 @@ export function createUserVideo(user, input) {
     thumbnail: source.thumbnail,
     title,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  });
+  };
+
+  const batch = firestore.batch();
+  batch.set(videoRef, videoPayload);
+  batch.set(uploadsCollection.doc(videoRef.id), videoPayload);
+  return batch.commit().then(() => videoRef);
+}
+
+function listVideosFromQuery(query) {
+  return query.get().then(snapshot => snapshot.docs.map(toVideo));
 }
 
 export function listUserVideos(limit = 12) {
@@ -137,11 +157,24 @@ export function listUserVideos(limit = 12) {
     return Promise.resolve([]);
   }
 
-  return collection
-    .orderBy('createdAt', 'desc')
-    .limit(limit)
-    .get()
-    .then(snapshot => snapshot.docs.map(toVideo));
+  return listVideosFromQuery(
+    collection
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+  );
+}
+
+export function listVideosByOwner(uid, limit = 24) {
+  const collection = userUploadsCollection(uid);
+  if (!collection) {
+    return Promise.resolve([]);
+  }
+
+  return listVideosFromQuery(
+    collection
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+  );
 }
 
 export function getUserVideo(videoId) {

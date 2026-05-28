@@ -28,3 +28,17 @@ export function upsertUserProfile(user, overrides = {}) {
     return userRef.set(profile, {merge: true}).then(() => authUser);
   });
 }
+
+export function getUserProfile(uid) {
+  if (!firestore || !uid) {
+    return Promise.resolve(null);
+  }
+
+  return firestore.collection('users').doc(uid).get().then((snapshot) => {
+    if (!snapshot.exists) {
+      return null;
+    }
+
+    return snapshot.data();
+  });
+}

@@ -13,7 +13,8 @@ import {auth} from './services/firebase';
 import {authError, authStateChanged} from './store/actions/auth';
 import ActivityFeed from './containers/ActivityFeed/ActivityFeed';
 import {upsertUserProfile} from './services/user-profile';
-import UserVideos from './containers/UserVideos/UserVideos';
+import UploadVideo from './containers/UploadVideo/UploadVideo';
+import CreatorProfile from './containers/CreatorProfile/CreatorProfile';
 
 const API_KEY = process.env.REACT_APP_YT_API_KEY;
 
@@ -26,7 +27,9 @@ class App extends Component {
           <Route path="/library/history" render={() => <ActivityFeed type='history'/>}/>
           <Route path="/library/watch-later" render={() => <ActivityFeed type='watchLater'/>}/>
           <Route path="/library/liked" render={() => <ActivityFeed type='liked'/>}/>
-          <Route path="/studio/videos" component={UserVideos}/>
+          <Route path="/studio/upload" component={UploadVideo}/>
+          <Route path="/studio/profile" component={CreatorProfile}/>
+          <Route path="/studio/videos" component={UploadVideo}/>
           <Route path="/results" render={() => <Search key={this.props.location.key}/>}/>
           <Route path="/watch" render={() => <Watch key={this.props.location.key}/>}/>
           <Route path="/" component={Home}/>

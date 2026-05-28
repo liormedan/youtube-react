@@ -96,6 +96,19 @@
     }
   }
 
+  .header-action__plus {
+    align-items: center;
+    background: rgba(15, 23, 42, .09);
+    border-radius: 50%;
+    display: inline-flex;
+    font-size: 18px;
+    font-weight: 900;
+    height: 22px;
+    justify-content: center;
+    line-height: 1;
+    width: 22px;
+  }
+
   .header-action--soon {
     cursor: default;
     opacity: .62;
