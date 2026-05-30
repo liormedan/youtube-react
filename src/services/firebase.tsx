@@ -1,7 +1,8 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.REACT_APP_FIREBASE_API_KEY,
@@ -23,6 +24,7 @@ const app = isBrowser && isFirebaseConfigured
 
 export const auth = app ? getAuth(app) : null;
 export const firestore = app ? getFirestore(app) : null;
+export const storage = app ? getStorage(app) : null;
 export const googleProvider = app ? new GoogleAuthProvider() : null;
 
 export function toAuthUser(user, overrides = {}) {
