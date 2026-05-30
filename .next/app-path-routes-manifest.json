@@ -1,6 +1,8 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/admin/approve/page": "/admin/approve",
+  "/api/notify/route": "/api/notify",
   "/feed/trending/page": "/feed/trending",
   "/library/history/page": "/library/history",
   "/library/liked/page": "/library/liked",

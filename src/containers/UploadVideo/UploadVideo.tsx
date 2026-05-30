@@ -180,14 +180,25 @@ class UploadVideo extends React.Component {
           };
           
           createUserVideo(this.props.user, videoData)
-            .then(() => {
+            .then((videoRef) => {
+              // Call the notification API
+              fetch('/api/notify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  videoId: videoRef.id,
+                  title: this.state.title,
+                  ownerEmail: this.props.user.email,
+                }),
+              }).catch(console.error);
+
               // Clear file input by resetting state
               this.setState({
                 description: '',
                 loading: false,
                 uploadProgress: 0,
                 videoFile: null,
-                success: 'Video published to your profile and the community feed.',
+                success: 'Video uploaded and is pending approval.',
                 title: '',
               }, () => this.loadVideos());
             })

@@ -9,6 +9,7 @@
     "firebase": "^12.14.0",
     "javascript-time-ago": "^2.0.13",
     "next": "^16.2.6",
+    "nodemailer": "^8.0.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-linkify": "^1.0.0-alpha",
@@ -33,6 +34,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@types/nodemailer": "^8.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.3",
     "enzyme-to-json": "^3.5.0"

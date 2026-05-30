@@ -1,6 +1,7 @@
 {
   "app": {
     "[project]/app/_not-found/page": [],
+    "[project]/app/admin/approve/page": [],
     "[project]/app/feed/trending/page": [],
     "[project]/app/library/history/page": [],
     "[project]/app/library/liked/page": [],

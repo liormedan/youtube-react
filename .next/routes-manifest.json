@@ -42,6 +42,18 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/admin/approve",
+      "regex": "^/admin/approve(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/approve(?:/)?$"
+    },
+    {
+      "page": "/api/notify",
+      "regex": "^/api/notify(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/notify(?:/)?$"
+    },
+    {
       "page": "/feed/trending",
       "regex": "^/feed/trending(?:/)?$",
       "routeKeys": {},

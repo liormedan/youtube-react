@@ -1,5 +1,5 @@
-﻿// @ts-nocheck
-import { collection, doc, setDoc, getDocs, getDoc, query, orderBy, limit, deleteDoc, writeBatch, serverTimestamp } from 'firebase/firestore';
+// @ts-nocheck
+import { collection, doc, setDoc, getDocs, getDoc, query, orderBy, limit, deleteDoc, writeBatch, serverTimestamp, where } from 'firebase/firestore';
 import { firestore } from './firebase';
 
 const DIRECT_VIDEO_PATTERN = /\.(mp4|webm|ogg)(\?.*)?$/i;
@@ -145,7 +145,7 @@ function buildVideoPayload(user, input, overrides = {}) {
     title,
     updatedAt: serverTimestamp(),
     videoId: overrides.videoId,
-    visibility: overrides.visibility || 'public',
+    visibility: overrides.visibility || 'pending',
   };
 }
 
@@ -182,7 +182,7 @@ export function listUserVideos(limitCount = 12) {
   }
 
   return listVideosFromQuery(
-    query(collectionRef, orderBy('createdAt', 'desc'), limit(limitCount))
+    query(collectionRef, where('visibility', '==', 'public'), orderBy('createdAt', 'desc'), limit(limitCount))
   );
 }
 
@@ -229,6 +229,28 @@ export function updateUserVideo(user, videoId, input) {
     const batch = writeBatch(firestore);
     batch.set(ownerRef, payload);
     batch.set(publicRef, payload);
+    return batch.commit();
+  });
+}
+
+export function approveUserVideo(videoId) {
+  const normalizedVideoId = normalizeVideoId(videoId);
+  const publicCollection = videosCollection();
+  if (!publicCollection || !normalizedVideoId) {
+    return Promise.reject(new Error('Invalid request.'));
+  }
+
+  const publicRef = doc(publicCollection, normalizedVideoId);
+  return getDoc(publicRef).then((snapshot) => {
+    if (!snapshot.exists()) return Promise.reject(new Error('Video not found.'));
+    const data = snapshot.data();
+    const ownerUid = data.ownerUid;
+    const uploadsRef = userUploadsCollection(ownerUid);
+    const ownerRef = doc(uploadsRef, normalizedVideoId);
+
+    const batch = writeBatch(firestore);
+    batch.update(publicRef, { visibility: 'public' });
+    if (ownerUid) batch.update(ownerRef, { visibility: 'public' });
     return batch.commit();
   });
 }

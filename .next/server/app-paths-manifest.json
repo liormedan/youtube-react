@@ -1,6 +1,8 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/admin/approve/page": "app/admin/approve/page.js",
+  "/api/notify/route": "app/api/notify/route.js",
   "/feed/trending/page": "app/feed/trending/page.js",
   "/library/history/page": "app/library/history/page.js",
   "/library/liked/page": "app/library/liked/page.js",
