@@ -1,0 +1,14 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/feed/trending/page": "app/feed/trending/page.js",
+  "/library/history/page": "app/library/history/page.js",
+  "/library/liked/page": "app/library/liked/page.js",
+  "/library/watch-later/page": "app/library/watch-later/page.js",
+  "/page": "app/page.js",
+  "/results/page": "app/results/page.js",
+  "/studio/profile/page": "app/studio/profile/page.js",
+  "/studio/upload/page": "app/studio/upload/page.js",
+  "/studio/videos/page": "app/studio/videos/page.js",
+  "/watch/page": "app/watch/page.js"
+}

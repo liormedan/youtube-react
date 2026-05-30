@@ -13,7 +13,7 @@
 
     .brand-link {
       align-items: center;
-      color: $text-color-dark;
+      color: var(--text-primary);
       display: flex;
       font-size: 18px;
       font-weight: 700;
@@ -21,7 +21,7 @@
       white-space: nowrap;
 
       &:hover {
-        color: $text-color-dark;
+        color: var(--text-primary);
       }
     }
 
@@ -74,7 +74,7 @@
   .header-action {
     align-items: center;
     border-radius: 999px;
-    color: $text-color-dark;
+    color: var(--text-primary);
     display: inline-flex;
     font-size: 13px;
     font-weight: 700;
@@ -91,7 +91,7 @@
 
     &:hover,
     &:focus {
-      color: $text-color-dark;
+      color: var(--text-primary);
       transform: translateY(-1px);
     }
   }
@@ -127,7 +127,7 @@
   }
 
   .header-icon {
-    color: $brand-primary-dark;
+    color: var(--icon-color);
     font-size: 18px;
     margin: 0;
     opacity: 0.72;

@@ -1,0 +1,18 @@
+{
+  "app": {
+    "[project]/app/_not-found/page": [],
+    "[project]/app/feed/trending/page": [],
+    "[project]/app/library/history/page": [],
+    "[project]/app/library/liked/page": [],
+    "[project]/app/library/watch-later/page": [],
+    "[project]/app/page": [],
+    "[project]/app/results/page": [],
+    "[project]/app/studio/profile/page": [],
+    "[project]/app/studio/upload/page": [],
+    "[project]/app/studio/videos/page": [],
+    "[project]/app/watch/page": []
+  },
+  "appUsingSizeAdjust": false,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

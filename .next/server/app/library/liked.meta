@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/library/layout,_N_T_/library/liked/layout,_N_T_/library/liked/page,_N_T_/library/liked"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/library/liked/__PAGE__",
+    "/library/liked",
+    "/library",
+    "/_index",
+    "/_head"
+  ]
+}

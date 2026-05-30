@@ -30,15 +30,15 @@
   margin-top: 8px;
   grid-row: 2 / 3; /* is overriden when VideoPreview is horizontal */
   grid-column: 1 / 2; /* is overriden when VideoPreview is horizontal */
-  color: $text-color-dark;
+  color: var(--text-primary);
 
   .video-preview-metadata-container {
     padding-top: 5px;
     font-size: 14px;
-    color: $grey;
+    color: var(--text-secondary);
 
     .channel-title {
-      color: $brand-primary-dark;
+      color: var(--text-secondary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -57,7 +57,7 @@
   }
 
   .semi-bold {
-    color: $text-color-dark;
+    color: var(--text-primary);
 
     &.expanded {
       font-weight: 500;

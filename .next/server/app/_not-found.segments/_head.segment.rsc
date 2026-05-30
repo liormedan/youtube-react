@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[97367,["/_next/static/chunks/0-cfjwyljeyy9.js","/_next/static/chunks/03nobbyg0.5tr.js","/_next/static/chunks/0manelh452bu_.js","/_next/static/chunks/0mjsub732v740.js","/_next/static/chunks/0xfz6jqcq4o3r.js"],"ViewportBoundary"]
+3:I[97367,["/_next/static/chunks/0-cfjwyljeyy9.js","/_next/static/chunks/03nobbyg0.5tr.js","/_next/static/chunks/0manelh452bu_.js","/_next/static/chunks/0mjsub732v740.js","/_next/static/chunks/0xfz6jqcq4o3r.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"medan-Tube"}],["$","meta","1",{"name":"description","content":"Youtube clone"}]]}]}]}],null]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"Ltd8CmuL-TKZJlnFOunbB"}

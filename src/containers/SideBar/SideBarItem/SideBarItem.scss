@@ -5,7 +5,7 @@
   span {
     i.icon {
       margin-right: 20px;
-      color: $brand-primary-dark;
+      color: var(--icon-color);
       opacity: 0.72;
     }
   }
@@ -14,7 +14,7 @@
     background: linear-gradient(90deg, rgba(201, 242, 77, 0.32), rgba(50, 174, 232, 0.12));
 
     span {
-      color: $text-color-dark;
+      color: var(--text-primary);
       font-weight: 600;
     }
 

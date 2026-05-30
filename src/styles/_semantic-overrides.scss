@@ -1,0 +1,29 @@
+// src/styles/_semantic-overrides.scss
+
+body.theme-dark {
+  .ui.menu .item:hover,
+  .ui.menu .item.active {
+    background: var(--item-bg-hover) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .ui.menu .item:hover .icon,
+  .ui.menu .item:hover span {
+    color: var(--text-primary) !important;
+  }
+
+  .ui.dropdown .menu .item:hover {
+    background: var(--item-bg-hover) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .ui.button:not(.primary) {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    
+    &:hover {
+      background: var(--item-bg-hover);
+      color: var(--text-primary);
+    }
+  }
+}

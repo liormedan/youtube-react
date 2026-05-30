@@ -1,0 +1,14 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/feed/trending/page": "/feed/trending",
+  "/library/history/page": "/library/history",
+  "/library/liked/page": "/library/liked",
+  "/library/watch-later/page": "/library/watch-later",
+  "/page": "/",
+  "/results/page": "/results",
+  "/studio/profile/page": "/studio/profile",
+  "/studio/upload/page": "/studio/upload",
+  "/studio/videos/page": "/studio/videos",
+  "/watch/page": "/watch"
+}

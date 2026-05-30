@@ -1,0 +1,38 @@
+// src/styles/_theme.scss
+
+:root {
+  // Default Light Theme Variables
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9f9f9;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --nav-bg: #ffffff;
+  --item-bg-hover: rgba(0, 0, 0, 0.05);
+  --brand-color: #ff0000;
+  --input-bg: #ffffff;
+  --input-border: #cccccc;
+  --icon-color: #606060;
+}
+
+body.theme-dark {
+  // Blue-based Dark Theme Variables
+  --bg-primary: #0b1120;
+  --bg-secondary: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --nav-bg: #0f172a;
+  --item-bg-hover: rgba(255, 255, 255, 0.1);
+  --brand-color: #3b82f6; // Vibrant blue accent instead of standard red
+  --input-bg: #1e293b;
+  --input-border: #334155;
+  --icon-color: #94a3b8;
+}
+
+// Global body defaults using CSS variables
+body {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
