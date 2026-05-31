@@ -31,7 +31,8 @@
     "deploy:hosting": "npm run build && firebase deploy --only hosting",
     "deploy:firestore": "firebase deploy --only firestore",
     "check:auth": "node scripts/check-firebase-auth.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node scripts/patch-semantic.js"
   },
   "devDependencies": {
     "@types/nodemailer": "^8.0.0",
