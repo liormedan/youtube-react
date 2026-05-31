@@ -1,30 +1,27 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 'use client';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window === 'undefined') return 'dark';
-    
-    // Check local storage first
-    const savedTheme = window.localStorage.getItem('medan-tube-theme');
-    if (savedTheme) {
-      return savedTheme;
-    }
-    // Fallback to system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return 'light';
-    }
-    return 'dark';
-  });
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
-    // Update local storage
+    const savedTheme = window.localStorage.getItem('medan-tube-theme');
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      setTheme(savedTheme);
+      return;
+    }
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      setTheme('light');
+    }
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('medan-tube-theme', theme);
-    
-    // Update body classes
+
     if (theme === 'dark') {
       document.body.classList.add('theme-dark');
       document.body.classList.remove('theme-light');
@@ -48,4 +45,3 @@ export function ThemeProvider({ children }) {
 export function useTheme() {
   return useContext(ThemeContext);
 }
-

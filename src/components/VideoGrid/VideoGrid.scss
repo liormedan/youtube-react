@@ -3,7 +3,13 @@
   flex-wrap: wrap;
 
   & > * {
-    margin-right: 16px;
     margin-bottom: 24px;
+    margin-right: 16px;
   }
+}
+
+.video-grid-divider {
+  border: none;
+  border-top: 1px solid rgba(50, 174, 232, 0.18);
+  margin: 1.5rem 0;
 }

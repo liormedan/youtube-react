@@ -4,22 +4,32 @@ import nodemailer from 'nodemailer';
 export async function POST(request) {
   try {
     const { videoId, title, ownerEmail } = await request.json();
+    const appBaseUrl = process.env.APP_BASE_URL;
+    const smtpEmail = process.env.SMTP_EMAIL;
+    const smtpPassword = process.env.SMTP_PASSWORD;
+
+    if (!appBaseUrl || !smtpEmail || !smtpPassword) {
+      return NextResponse.json(
+        { success: false, error: 'Missing APP_BASE_URL or SMTP credentials.' },
+        { status: 500 }
+      );
+    }
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASSWORD,
+        user: smtpEmail,
+        pass: smtpPassword,
       },
     });
 
     const admins = ['liormedan1@gmail.com', 'medan4u@gmail.com'];
     
     // The link the admins click to approve
-    const approveLink = `https://medan-tube.web.app/admin/approve?videoId=${videoId}`;
+    const approveLink = `${appBaseUrl.replace(/\/$/, '')}/admin/approve?videoId=${videoId}`;
 
     const mailOptions = {
-      from: process.env.SMTP_EMAIL,
+      from: smtpEmail,
       to: admins.join(', '),
       subject: `New Video Upload Pending Approval: ${title}`,
       html: `

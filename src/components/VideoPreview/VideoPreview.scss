@@ -72,6 +72,11 @@
   grid-row: 1 / 2;
   grid-column: 1 / 2;
 
+  .video-preview__image {
+    display: block;
+    width: 100%;
+  }
+
   /* Video duration label at bottom right */
   .time-label {
     position: absolute;

@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client';
-import React, { useState } from 'react';
-import { Button, Dropdown, Form, Icon, Message } from 'semantic-ui-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Form, Icon, Message } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { auth, googleProvider } from '../../services/firebase';
@@ -32,8 +32,30 @@ export default function AuthMenu() {
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const authErrorMessage = localError || globalError;
+
+  useEffect(() => {
+    function handleDocumentClick(event: MouseEvent) {
+      if (!containerRef.current) {
+        return;
+      }
+
+      if (!containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    if (open) {
+      document.addEventListener('mousedown', handleDocumentClick);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleDocumentClick);
+    };
+  }, [open]);
 
   const runAuthAction = (action: () => Promise<any>) => {
     setLoading(true);
@@ -83,6 +105,7 @@ export default function AuthMenu() {
   };
 
   const onSignOut = () => {
+    setOpen(false);
     signOut(auth);
   };
 
@@ -104,10 +127,10 @@ export default function AuthMenu() {
   };
 
   const renderGuestTrigger = () => (
-    <Button className='auth-trigger' compact>
+    <span className='auth-trigger'>
       <Icon name='user circle'/>
       Sign in
-    </Button>
+    </span>
   );
 
   const renderUserTrigger = () => {
@@ -115,15 +138,15 @@ export default function AuthMenu() {
       return <img src={user.photoURL} className="ui avatar image" alt="User avatar" />;
     }
     return (
-      <Button className='auth-trigger' compact>
+      <span className='auth-trigger'>
         <Icon name='user circle'/>
         {user?.displayName || user?.email}
-      </Button>
+      </span>
     );
   };
 
   const renderSignedOutMenu = () => (
-    <Dropdown.Item className='auth-panel'>
+    <div className='auth-panel'>
       <div className='auth-title'>Connect your account</div>
       {!firebaseConfigured && (
         <Message warning size='mini'>
@@ -185,37 +208,47 @@ export default function AuthMenu() {
           {mode === 'signIn' ? 'Create account with email' : 'Back to sign in'}
         </Button>
       </Form>
-    </Dropdown.Item>
+    </div>
   );
 
   const renderSignedInMenu = () => (
     <React.Fragment>
-      <Dropdown.Item className='auth-panel'>
+      <div className='auth-panel auth-panel--summary'>
         <div className='auth-title'>{user?.displayName || user?.email}</div>
         <div className='auth-subtitle'>Activity saves to Firebase</div>
-      </Dropdown.Item>
-      <Dropdown.Item as={Link} href='/studio/profile'>
+      </div>
+      <Link className='auth-link' href='/studio/profile' onClick={() => setOpen(false)}>
         <Icon name='user'/>
         My profile
-      </Dropdown.Item>
-      <Dropdown.Item as={Link} href='/studio/upload'>
+      </Link>
+      <Link className='auth-link' href='/studio/upload' onClick={() => setOpen(false)}>
         <Icon name='plus circle'/>
         New upload
-      </Dropdown.Item>
-      <Dropdown.Item onClick={onSignOut}>
+      </Link>
+      <button className='auth-link auth-link--button' onClick={onSignOut} type='button'>
         <Icon name='sign-out'/>
         Sign out
-      </Dropdown.Item>
+      </button>
     </React.Fragment>
   );
 
   const trigger = user ? renderUserTrigger() : renderGuestTrigger();
 
   return (
-    <Dropdown className='auth-menu' direction='left' icon={null} trigger={trigger}>
-      <Dropdown.Menu>
-        {user ? renderSignedInMenu() : renderSignedOutMenu()}
-      </Dropdown.Menu>
-    </Dropdown>
+    <div className='auth-menu' ref={containerRef}>
+      <button
+        aria-expanded={open}
+        aria-haspopup='menu'
+        className='auth-menu__trigger'
+        onClick={() => setOpen(prev => !prev)}
+        type='button'>
+        {trigger}
+      </button>
+      {open && (
+        <div className='auth-menu__panel' role='menu'>
+          {user ? renderSignedInMenu() : renderSignedOutMenu()}
+        </div>
+      )}
+    </div>
   );
 }

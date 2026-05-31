@@ -6,7 +6,17 @@ import Linkify from 'react-linkify';
 import {getPublishedAtDateString} from '../../services/date/date-format';
 import {getShortNumberString} from '../../services/number/number-format';
 
-export class VideoInfoBox extends React.Component {
+interface VideoInfoBoxProps {
+  channel: any;
+  className?: string;
+  video: any;
+}
+
+interface VideoInfoBoxState {
+  collapsed: boolean;
+}
+
+export class VideoInfoBox extends React.Component<VideoInfoBoxProps, VideoInfoBoxState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +39,7 @@ export class VideoInfoBox extends React.Component {
     const channelTitle = channel.snippet.title;
 
     return (
-      <div>
+      <div className={this.props.className}>
         <div className='video-info-box'>
           <Image className='channel-image' src={channelThumbnail} circular/>
           <div className="video-info">

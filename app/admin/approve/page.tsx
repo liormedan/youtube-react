@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Button, Message, Container, Segment, Header } from 'semantic-ui-react';
+import { Button, Message, Container } from 'semantic-ui-react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../../src/services/firebase';
 import { getUserVideo, approveUserVideo } from '../../../src/services/user-videos';
@@ -78,8 +78,8 @@ function ApproveContent() {
 
   return (
     <Container style={{ marginTop: '2em', padding: '1em' }}>
-      <Segment>
-        <Header as='h2'>Review Pending Video</Header>
+      <div>
+        <h2>Review Pending Video</h2>
         {success ? (
           <Message success header="Success" content="Video has been approved and is now public! Redirecting..." />
         ) : (
@@ -88,7 +88,7 @@ function ApproveContent() {
               <Video id={videoId} video={video} />
             </div>
             <div style={{ marginTop: '1em' }}>
-              <Header as='h3'>{video.snippet.title}</Header>
+              <h3>{video.snippet.title}</h3>
               <p><strong>Description:</strong> {video.snippet.description}</p>
               <p><strong>Owner UID:</strong> {video.management.ownerUid}</p>
             </div>
@@ -103,7 +103,7 @@ function ApproveContent() {
             </Button>
           </div>
         )}
-      </Segment>
+      </div>
     </Container>
   );
 }

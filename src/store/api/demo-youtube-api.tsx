@@ -22,7 +22,7 @@ const videos = [
   snippet: {
     channelId,
     channelTitle,
-    description: 'Local demo content shown because REACT_APP_YT_API_KEY is not configured.',
+    description: 'Local demo content shown because YouTube integration is disabled for this deployment.',
     publishedAt: new Date(Date.now() - (index + 1) * 86400000).toISOString(),
     thumbnails: {
       medium: {
@@ -51,7 +51,7 @@ const categories = [
 const channel = {
   id: channelId,
   snippet: {
-    description: 'A local demo channel used while the YouTube Data API key is missing.',
+    description: 'A local demo channel used while live YouTube integration is disabled.',
     thumbnails: {
       medium: {
         url: 'https://i.ytimg.com/vi/M7lc1UVf-VE/mqdefault.jpg',

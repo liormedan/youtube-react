@@ -4,7 +4,13 @@ import {CommentsHeader} from "./CommentsHeader/CommentsHeader";
 import {Comment} from './Comment/Comment';
 import {AddComment} from './AddComment/AddComment';
 
-export class Comments extends React.Component {
+interface CommentsProps {
+  amountComments: any;
+  className?: string;
+  comments: any[];
+}
+
+export class Comments extends React.Component<CommentsProps> {
   render() {
     if (!this.props.comments) {
       return <div/>;
@@ -15,7 +21,7 @@ export class Comments extends React.Component {
     });
 
     return(
-      <div>
+      <div className={this.props.className}>
         <CommentsHeader amountComments={this.props.amountComments}/>
         <AddComment key='add-comment'/>
         {comments}

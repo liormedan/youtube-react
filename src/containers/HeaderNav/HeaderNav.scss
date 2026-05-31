@@ -1,14 +1,22 @@
 @import '../../styles/shared.scss';
-/*
-  The .ui.menu is needed otherwise there's a more specific rule from semantic UI
-  we use this rule to tweak the SCSS
-*/
-.ui.menu.top-menu {
+
+.top-menu {
+  align-items: center;
   background: $surface-panel;
   border: none;
   box-shadow: 0 1px 0 rgba(50, 174, 232, 0.16);
+  display: flex;
+  inset: 0 0 auto 0;
+  min-height: $header-nav-height;
+  position: fixed;
+  z-index: 20;
 
   .logo {
+    align-items: center;
+    display: flex;
+    flex: 0 0 $sidebar-left-width;
+    min-height: $header-nav-height;
+    padding: 0 1rem;
     width: $sidebar-left-width;
 
     .brand-link {
@@ -29,11 +37,18 @@
       color: $brand-primary;
       font-size: 18px;
       margin: 0;
+      text-align: center;
+      width: 18px;
     }
   }
+
   .nav-container {
+    align-items: center;
+    display: flex;
     flex-grow: 1;
-    padding: 0;
+    gap: 1rem;
+    min-height: $header-nav-height;
+    padding: 0 1rem 0 0;
 
     .search-input {
       padding-left: 0;
@@ -43,32 +58,58 @@
         width: 100%;
       }
 
-      .ui.action.input {
-        input {
-          border-color: rgba(50, 174, 232, 0.32);
+      .search-form-field {
+        display: flex;
+      }
 
-          &:focus {
-            border-color: $brand-primary;
-          }
+      .search-field {
+        border: 1px solid rgba(50, 174, 232, 0.32);
+        border-radius: 8px 0 0 8px;
+        color: var(--text-primary);
+        min-height: 38px;
+        padding: 0 12px;
+        width: 100%;
+
+        &:focus {
+          border-color: $brand-primary;
+          outline: none;
         }
+      }
 
-        .button {
-          background: $brand-primary;
+      .search-button {
+        background: $brand-primary;
+        border: none;
+        border-radius: 0 8px 8px 0;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 700;
+        min-width: 58px;
+
+        &:hover,
+        &:focus {
+          background: $brand-primary-dark;
           color: #fff;
-
-          &:hover,
-          &:focus {
-            background: $brand-primary-dark;
-            color: #fff;
-          }
         }
       }
     }
   }
 
-  .right.menu {
+  .nav-actions {
     align-items: center;
+    display: flex;
+    flex: 1;
     gap: 4px;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .nav-action-item {
+    align-items: center;
+    display: flex;
+  }
+
+  .nav-action-item--auth {
+    margin-left: 4px;
   }
 
   .header-action {
@@ -136,5 +177,19 @@
       color: $brand-primary;
       opacity: 1;
     }
+  }
+
+  .header-icon-glyph {
+    display: inline-flex;
+    font-weight: 800;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
   }
 }

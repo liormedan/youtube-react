@@ -8,8 +8,6 @@ import { auth } from '../../services/firebase';
 import { onAuthStateChanged, getRedirectResult } from 'firebase/auth';
 import { upsertUserProfile } from '../../services/user-profile';
 
-const API_KEY = process.env.NEXT_PUBLIC_YT_API_KEY || process.env.REACT_APP_YT_API_KEY;
-
 export function GlobalLifecycle() {
   const dispatch = useDispatch();
 
@@ -17,25 +15,9 @@ export function GlobalLifecycle() {
     let unsubscribeAuth;
 
     function loadYoutubeApi() {
-      if (!API_KEY) {
-        installDemoYoutubeApi();
-        dispatch(youtubeLibraryLoaded());
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = "https://apis.google.com/js/client.js";
-
-      script.onload = () => {
-        (window as any).gapi.load('client', () => {
-          (window as any).gapi.client.setApiKey(API_KEY);
-          (window as any).gapi.client.load('youtube', 'v3', () => {
-            dispatch(youtubeLibraryLoaded());
-          });
-        });
-      };
-
-      document.body.appendChild(script);
+      // This deployment intentionally avoids the live YouTube Data API.
+      installDemoYoutubeApi();
+      dispatch(youtubeLibraryLoaded());
     }
 
     function listenForAuthState() {

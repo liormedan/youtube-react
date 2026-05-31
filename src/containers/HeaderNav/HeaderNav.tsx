@@ -1,7 +1,6 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 'use client';
 import React, { useState } from 'react';
-import {Form, Icon, Input, Menu} from 'semantic-ui-react';
 import './HeaderNav.scss';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
@@ -13,6 +12,23 @@ const soonActions = [
   {icon: 'chat', label: 'Messages'},
   {icon: 'alarm', label: 'Notifications'},
 ];
+
+const iconGlyphs = {
+  'youtube play': '▶',
+  'grid layout': '#',
+  chat: 'C',
+  alarm: '!',
+  sun: 'S',
+  moon: 'M',
+};
+
+function HeaderIcon({ name, className = '' }) {
+  return (
+    <span aria-hidden='true' className={['header-icon-glyph', className].filter(Boolean).join(' ')}>
+      {iconGlyphs[name] || '•'}
+    </span>
+  );
+}
 
 export function HeaderNav() {
   const [query, setQuery] = useState('');
@@ -29,55 +45,62 @@ export function HeaderNav() {
   };
 
   return (
-    <Menu borderless className='top-menu' fixed='top'>
-      <Menu.Item header className='logo'>
+    <header className='top-menu'>
+      <div className='logo'>
         <Link href='/' className='brand-link'>
-          <Icon name='youtube play' className='brand-icon'/>
+          <HeaderIcon name='youtube play' className='brand-icon'/>
           <span>medan-Tube</span>
         </Link>
-      </Menu.Item>
-      <Menu.Menu className='nav-container'>
-        <Menu.Item className='search-input'>
-          <Form onSubmit={onSubmit}>
-            <Form.Field>
-              <Input placeholder='Search'
-                     size='small'
-                     action='Go'
-                     value={query}
-                     onChange={onInputChange}
+      </div>
+      <div className='nav-container'>
+        <div className='search-input'>
+          <form onSubmit={(event) => {
+            event.preventDefault();
+            onSubmit();
+          }}>
+            <div className='search-form-field'>
+              <input
+                aria-label='Search'
+                className='search-field'
+                onChange={onInputChange}
+                placeholder='Search'
+                type='search'
+                value={query}
               />
-            </Form.Field>
-          </Form>
-        </Menu.Item>
-        <Menu.Menu position='right'>
-          <Menu.Item>
-            <div className='theme-toggle' onClick={toggleTheme} aria-label='Toggle theme' style={{ cursor: 'pointer', padding: '0 10px' }}>
-              <Icon name={theme === 'dark' ? 'sun' : 'moon'} size='large' className='header-icon' style={{ margin: 0 }} />
+              <button className='search-button' type='submit'>
+                Go
+              </button>
             </div>
-          </Menu.Item>
-          <Menu.Item>
+          </form>
+        </div>
+        <div className='nav-actions'>
+          <div className='nav-action-item'>
+            <button className='theme-toggle' onClick={toggleTheme} aria-label='Toggle theme' type='button'>
+              <HeaderIcon name={theme === 'dark' ? 'sun' : 'moon'} className='header-icon' />
+            </button>
+          </div>
+          <div className='nav-action-item'>
             <Link href='/studio/upload' className='header-action header-action--upload' aria-label='Create upload'>
               <span className='header-action__plus'>+</span>
               <span>Upload</span>
             </Link>
-          </Menu.Item>
+          </div>
           {soonActions.map(action => (
-            <Menu.Item key={action.label}>
+            <div className='nav-action-item' key={action.label}>
               <span className='header-action header-action--soon' aria-label={`${action.label} coming soon`}>
-                <Icon className='header-icon' name={action.icon}/>
+                <HeaderIcon className='header-icon' name={action.icon}/>
                 <span>{action.label}</span>
                 <span className='header-action__soon'>Soon</span>
               </span>
-            </Menu.Item>
+            </div>
           ))}
-          <Menu.Item name='auth'>
+          <div className='nav-action-item nav-action-item--auth'>
             <AuthMenu/>
-          </Menu.Item>
-        </Menu.Menu>
-      </Menu.Menu>
-    </Menu>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
 
 export default HeaderNav;
-

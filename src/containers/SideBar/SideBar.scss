@@ -1,12 +1,19 @@
 @import '../../styles/shared.scss';
 
 $sidebar-hover-color: $brand-primary-soft;
-.ui.menu.fixed.side-nav {
+
+.side-nav {
   background-color: $brand-primary-soft;
   box-shadow: inset -1px 0 0 rgba(50, 174, 232, 0.18);
+  box-sizing: border-box;
+  left: 0;
   margin-top: $header-nav-height;
   overflow-y: auto;
   padding-bottom: $header-nav-height;
+  position: fixed;
+  top: 0;
+  width: $sidebar-left-width;
+  z-index: 10;
 
   .sidebar-item:hover {
     background: $sidebar-hover-color;
@@ -18,6 +25,8 @@ $sidebar-hover-color: $brand-primary-soft;
   }
 }
 
-.side-nav.ui.vertical.menu {
-  width: $sidebar-left-width;
+.side-nav__divider {
+  border: none;
+  border-top: 1px solid rgba(50, 174, 232, 0.18);
+  margin: 8px 0;
 }

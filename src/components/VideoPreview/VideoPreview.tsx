@@ -1,6 +1,5 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
-import {Image} from 'semantic-ui-react';
 import './VideoPreview.scss';
 
 import TimeAgo from 'javascript-time-ago';
@@ -30,7 +29,7 @@ export class VideoPreview extends React.Component {
       <Link href={`${this.props.pathname || ''}${this.props.search || ''}`}>
         <div className={['video-preview', horizontal, expanded].join(' ')}>
           <div className='image-container'>
-            <Image src={video.snippet.thumbnails.medium.url}/>
+            <img alt={video.snippet.title} className='video-preview__image' src={video.snippet.thumbnails.medium.url}/>
             <div className='time-label'>
               <span>{videoDuration}</span>
             </div>
