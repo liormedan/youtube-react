@@ -23,14 +23,28 @@
   }
 
   .auth-trigger {
+    align-items: center;
     background: $brand-primary-soft;
+    border-radius: 999px;
     color: $brand-primary-dark;
+    display: inline-flex;
+    gap: 8px;
+    min-height: 36px;
+    padding: 8px 12px;
 
     &:hover,
     &:focus {
       background: $brand-primary;
       color: #fff;
     }
+  }
+
+  .auth-avatar {
+    border-radius: 999px;
+    display: block;
+    height: 32px;
+    object-fit: cover;
+    width: 32px;
   }
 }
 
@@ -54,8 +68,12 @@
 
   .auth-primary-button {
     background: $brand-primary;
+    border: none;
+    border-radius: 10px;
     color: #fff;
+    cursor: pointer;
     margin-bottom: 8px;
+    min-height: 40px;
     width: 100%;
 
     &:hover,
@@ -67,14 +85,6 @@
 
   .google-button {
     margin-bottom: 8px;
-    width: 100%;
-
-    .google.icon {
-      color: $brand-primary-dark;
-    }
-  }
-
-  .ui.basic.button {
     width: 100%;
   }
 }
@@ -102,4 +112,68 @@
     font: inherit;
     text-align: left;
   }
+}
+
+.auth-form {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-input {
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 10px;
+  color: $text-color-dark;
+  min-height: 40px;
+  padding: 0 12px;
+  width: 100%;
+
+  &:focus {
+    border-color: $brand-primary;
+    outline: none;
+  }
+}
+
+.auth-secondary-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 10px;
+  color: $text-color-dark;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  justify-content: center;
+  min-height: 40px;
+  width: 100%;
+
+  &:hover,
+  &:focus {
+    background: rgba(15, 23, 42, 0.04);
+  }
+}
+
+.auth-message {
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+
+  &--warning {
+    background: rgba(245, 158, 11, 0.12);
+    color: #92400e;
+  }
+
+  &--error {
+    background: rgba(239, 68, 68, 0.12);
+    color: #991b1b;
+  }
+}
+
+.auth-icon {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  justify-content: center;
+  line-height: 1;
+  min-width: 12px;
 }

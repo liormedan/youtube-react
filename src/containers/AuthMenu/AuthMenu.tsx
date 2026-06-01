@@ -1,30 +1,40 @@
 // @ts-nocheck
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form, Icon, Message } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
-import { auth, googleProvider } from '../../services/firebase';
-import { 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  signInWithPopup, 
-  signInWithRedirect, 
+import { auth, googleProvider, isFirebaseConfigured } from '../../services/firebase';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
   signOut,
   updateProfile
 } from 'firebase/auth';
-import { getAuthError, getCurrentUser, getFirebaseConfigured } from '../../store/reducers/auth';
+import { getAuthError, getCurrentUser } from '../../store/reducers/auth';
 import { authStateChanged } from '../../store/actions/auth';
 import { upsertUserProfile } from '../../services/user-profile';
 import './AuthMenu.scss';
 import { AppDispatch } from '../../store/configureStore';
 
+const iconGlyphs = {
+  user: 'U',
+  google: 'G',
+  upload: '+',
+  signout: '→',
+};
+
+function AuthIcon({ name }) {
+  return <span aria-hidden='true' className='auth-icon'>{iconGlyphs[name] || '•'}</span>;
+}
+
 export default function AuthMenu() {
   const dispatch = useDispatch<AppDispatch>();
 
   const globalError = useSelector(getAuthError);
-  const firebaseConfigured = useSelector(getFirebaseConfigured);
   const user = useSelector(getCurrentUser);
+  const firebaseConfigured = isFirebaseConfigured;
 
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
@@ -71,7 +81,7 @@ export default function AuthMenu() {
 
   const onCreateAccount = () => {
     const trimmedName = fullName.trim();
-    runAuthAction(() => 
+    runAuthAction(() =>
       createUserWithEmailAndPassword(auth, email, password)
         .then((credential) => {
           return updateProfile(credential.user, { displayName: trimmedName })
@@ -93,7 +103,7 @@ export default function AuthMenu() {
   };
 
   const onGoogleSignIn = () => {
-    runAuthAction(() => 
+    runAuthAction(() =>
       signInWithPopup(auth, googleProvider)
         .catch((err) => {
           if (shouldUseRedirectFallback(err)) {
@@ -114,13 +124,6 @@ export default function AuthMenu() {
     setMode(prev => prev === 'signIn' ? 'create' : 'signIn');
   };
 
-  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>, { name, value }: any) => {
-    setLocalError(null);
-    if (name === 'email') setEmail(value);
-    if (name === 'fullName') setFullName(value);
-    if (name === 'password') setPassword(value);
-  };
-
   const canSubmit = () => {
     const hasRequiredName = mode === 'signIn' || fullName.trim();
     return firebaseConfigured && email && password && hasRequiredName && !loading;
@@ -128,18 +131,18 @@ export default function AuthMenu() {
 
   const renderGuestTrigger = () => (
     <span className='auth-trigger'>
-      <Icon name='user circle'/>
+      <AuthIcon name='user' />
       Sign in
     </span>
   );
 
   const renderUserTrigger = () => {
     if (user?.photoURL) {
-      return <img src={user.photoURL} className="ui avatar image" alt="User avatar" />;
+      return <img src={user.photoURL} className='auth-avatar' alt='User avatar' />;
     }
     return (
       <span className='auth-trigger'>
-        <Icon name='user circle'/>
+        <AuthIcon name='user' />
         {user?.displayName || user?.email}
       </span>
     );
@@ -149,65 +152,76 @@ export default function AuthMenu() {
     <div className='auth-panel'>
       <div className='auth-title'>Connect your account</div>
       {!firebaseConfigured && (
-        <Message warning size='mini'>
-          Add Firebase values to .env.local to enable sign in.
-        </Message>
+        <div className='auth-message auth-message--warning'>
+          Add Firebase values to `.env.local` to enable sign in.
+        </div>
       )}
-      {authErrorMessage && <Message error size='mini'>{authErrorMessage}</Message>}
-      <Form>
-        <Form.Input
+      {authErrorMessage && <div className='auth-message auth-message--error'>{authErrorMessage}</div>}
+      <form className='auth-form' onSubmit={(event) => event.preventDefault()}>
+        <input
           autoComplete='email'
+          className='auth-input'
           disabled={!firebaseConfigured}
           name='email'
-          onChange={handleFieldChange}
+          onChange={(event) => {
+            setLocalError(null);
+            setEmail(event.target.value);
+          }}
           placeholder='Email'
+          type='email'
           value={email}
         />
         {mode === 'create' && (
-          <Form.Input
+          <input
             autoComplete='name'
+            className='auth-input'
             disabled={!firebaseConfigured}
             name='fullName'
-            onChange={handleFieldChange}
+            onChange={(event) => {
+              setLocalError(null);
+              setFullName(event.target.value);
+            }}
             placeholder='Full name'
+            type='text'
             value={fullName}
           />
         )}
-        <Form.Input
+        <input
           autoComplete='current-password'
+          className='auth-input'
           disabled={!firebaseConfigured}
           name='password'
-          onChange={handleFieldChange}
+          onChange={(event) => {
+            setLocalError(null);
+            setPassword(event.target.value);
+          }}
           placeholder='Password'
           type='password'
           value={password}
         />
-        <Button
-          basic
-          className='google-button'
+        <button
+          className='auth-secondary-button google-button'
           disabled={!firebaseConfigured || loading}
-          loading={loading}
           onClick={onGoogleSignIn}
           type='button'>
-          <Icon name='google'/>
-          Continue with Google
-        </Button>
-        <Button
+          <AuthIcon name='google' />
+          <span>{loading ? 'Working...' : 'Continue with Google'}</span>
+        </button>
+        <button
           className='auth-primary-button'
           disabled={!canSubmit()}
-          loading={loading}
           onClick={mode === 'signIn' ? onSignIn : onCreateAccount}
           type='button'>
-          {mode === 'signIn' ? 'Sign in' : 'Create account'}
-        </Button>
-        <Button
-          basic
+          {loading ? 'Working...' : mode === 'signIn' ? 'Sign in' : 'Create account'}
+        </button>
+        <button
+          className='auth-secondary-button'
           disabled={!firebaseConfigured || loading}
           onClick={onToggleMode}
           type='button'>
           {mode === 'signIn' ? 'Create account with email' : 'Back to sign in'}
-        </Button>
-      </Form>
+        </button>
+      </form>
     </div>
   );
 
@@ -218,15 +232,15 @@ export default function AuthMenu() {
         <div className='auth-subtitle'>Activity saves to Firebase</div>
       </div>
       <Link className='auth-link' href='/studio/profile' onClick={() => setOpen(false)}>
-        <Icon name='user'/>
+        <AuthIcon name='user' />
         My profile
       </Link>
       <Link className='auth-link' href='/studio/upload' onClick={() => setOpen(false)}>
-        <Icon name='plus circle'/>
+        <AuthIcon name='upload' />
         New upload
       </Link>
       <button className='auth-link auth-link--button' onClick={onSignOut} type='button'>
-        <Icon name='sign-out'/>
+        <AuthIcon name='signout' />
         Sign out
       </button>
     </React.Fragment>
