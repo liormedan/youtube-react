@@ -16,9 +16,16 @@ export class Comments extends React.Component<CommentsProps> {
       return <div/>;
     }
 
-    const comments = this.props.comments.map((comment) => {
-      return <Comment comment={comment} key={comment.id}/>
-    });
+    const seenCommentIds = new Set();
+    const comments = this.props.comments
+      .filter(comment => {
+        if (!comment || seenCommentIds.has(comment.id)) return false;
+        seenCommentIds.add(comment.id);
+        return true;
+      })
+      .map((comment) => {
+        return <Comment comment={comment} key={comment.id}/>
+      });
 
     return(
       <div className={this.props.className}>

@@ -65,10 +65,70 @@
     }
   }
 
-  &__submit.ui.button {
-    background: linear-gradient(135deg, $brand-primary, $brand-accent);
+  &__field {
+    display: block;
+    margin-bottom: 16px;
+
+    span {
+      color: $text-color-dark;
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input,
+    textarea {
+      border: 1px solid rgba($brand-primary, .16);
+      border-radius: 10px;
+      color: $text-color-dark;
+      font: inherit;
+      min-height: 44px;
+      padding: 11px 12px;
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+  }
+
+  &__message {
+    background: #f8fafc;
+    border: 1px solid rgba($brand-primary, .14);
+    border-radius: 12px;
     color: $text-color-dark;
+    margin-bottom: 18px;
+    max-width: 780px;
+    padding: 14px 16px;
+  }
+
+  &__message--error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+  }
+
+  &__message--success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+  }
+
+  &__submit {
+    background: linear-gradient(135deg, $brand-primary, $brand-accent);
+    border: 0;
+    border-radius: 10px;
+    color: $text-color-dark;
+    cursor: pointer;
     font-weight: 800;
+    min-height: 42px;
+    padding: 12px 18px;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: .65;
+    }
   }
 
   &__list {

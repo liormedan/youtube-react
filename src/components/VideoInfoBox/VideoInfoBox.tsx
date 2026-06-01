@@ -1,7 +1,6 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
 import './VideoInfoBox.scss';
-import {Image, Button, Divider} from 'semantic-ui-react';
 import Linkify from 'react-linkify';
 import {getPublishedAtDateString} from '../../services/date/date-format';
 import {getShortNumberString} from '../../services/number/number-format';
@@ -41,20 +40,20 @@ export class VideoInfoBox extends React.Component<VideoInfoBoxProps, VideoInfoBo
     return (
       <div className={this.props.className}>
         <div className='video-info-box'>
-          <Image className='channel-image' src={channelThumbnail} circular/>
-          <div className="video-info">
+          <img className='channel-image' src={channelThumbnail} alt={channelTitle}/>
+          <div className='video-info'>
             <div className='channel-name'>{channelTitle}</div>
             <div className='video-publication-date'>{publishedAtString}</div>
           </div>
-          <Button className='subscribe'>{buttonText}</Button>
-          <div className="video-description">
+          <button className='subscribe' type='button'>{buttonText}</button>
+          <div className='video-description'>
             <div className={descriptionTextClass}>
               {descriptionParagraphs}
             </div>
-            <Button compact onClick={this.onToggleCollapseButtonClick}>{buttonTitle}</Button>
+            <button className='video-info-box__toggle' onClick={this.onToggleCollapseButtonClick} type='button'>{buttonTitle}</button>
           </div>
         </div>
-        <Divider/>
+        <hr className='video-info-box__divider'/>
       </div>
     );
   }
@@ -95,4 +94,3 @@ export class VideoInfoBox extends React.Component<VideoInfoBoxProps, VideoInfoBo
     };
   }
 }
-

@@ -1,6 +1,5 @@
 ﻿// @ts-nocheck
 import React from 'react';
-import {Button, Form, Message} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {SideBar} from '../SideBar/SideBar';
 import {VideoPreview} from '../../components/VideoPreview/VideoPreview';
@@ -44,52 +43,41 @@ class UserVideos extends React.Component {
 
   renderForm() {
     if (!this.props.firebaseConfigured) {
-      return <Message>Firebase is not configured yet. Add your project values to .env.local.</Message>;
+      return <div className='user-videos__message'>Firebase is not configured yet. Add your project values to .env.local.</div>;
     }
 
     if (!this.props.user) {
-      return <Message>Sign in to upload videos.</Message>;
+      return <div className='user-videos__message'>Sign in to upload videos.</div>;
     }
 
     return (
-      <Form className='user-videos__form' error={Boolean(this.state.error)} success={Boolean(this.state.success)} onSubmit={this.handleSubmit}>
+      <form className='user-videos__form' onSubmit={this.handleSubmit}>
         <div className='user-videos__form-heading'>
           <h3>Video details</h3>
           <p>Use a link that viewers can access. Google Drive files must be shared publicly or with anyone who has the link.</p>
         </div>
-        <Form.Input
-          label='Title'
-          name='title'
-          onChange={this.handleInputChange}
-          placeholder='Video title'
-          required
-          value={this.state.title}
-        />
-        <Form.Input
-          label='Video or Drive link'
-          name='sourceUrl'
-          onChange={this.handleInputChange}
-          placeholder='https://drive.google.com/file/d/... or https://example.com/video.mp4'
-          required
-          value={this.state.sourceUrl}
-        />
-        <Form.TextArea
-          label='Description'
-          name='description'
-          onChange={this.handleInputChange}
-          placeholder='Short description'
-          value={this.state.description}
-        />
-        <Message error content={this.state.error}/>
-        <Message success content={this.state.success}/>
-        <Button className='user-videos__submit' loading={this.state.loading} type='submit'>Publish video</Button>
-      </Form>
+        <label className='user-videos__field'>
+          <span>Title</span>
+          <input name='title' onChange={this.handleInputChange} placeholder='Video title' required value={this.state.title} />
+        </label>
+        <label className='user-videos__field'>
+          <span>Video or Drive link</span>
+          <input name='sourceUrl' onChange={this.handleInputChange} placeholder='https://drive.google.com/file/d/... or https://example.com/video.mp4' required value={this.state.sourceUrl} />
+        </label>
+        <label className='user-videos__field'>
+          <span>Description</span>
+          <textarea name='description' onChange={this.handleInputChange} placeholder='Short description' value={this.state.description} />
+        </label>
+        {this.state.error && <div className='user-videos__message user-videos__message--error'>{this.state.error}</div>}
+        {this.state.success && <div className='user-videos__message user-videos__message--success'>{this.state.success}</div>}
+        <button className='user-videos__submit' disabled={this.state.loading} type='submit'>{this.state.loading ? 'Publishing...' : 'Publish video'}</button>
+      </form>
     );
   }
 
   renderVideoList() {
     if (!this.state.videos.length) {
-      return <Message>No community videos yet.</Message>;
+      return <div className='user-videos__message'>No community videos yet.</div>;
     }
 
     return (
@@ -109,11 +97,13 @@ class UserVideos extends React.Component {
     );
   }
 
-  handleInputChange = (event, data) => {
-    this.setState({[data.name]: data.value});
+  handleInputChange = (event) => {
+    const {name, value} = event.target;
+    this.setState({[name]: value});
   };
 
-  handleSubmit = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     this.setState({error: null, loading: true, success: null});
     createUserVideo(this.props.user, this.state)
       .then(() => this.setState({

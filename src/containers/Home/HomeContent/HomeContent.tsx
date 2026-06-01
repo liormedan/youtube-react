@@ -28,18 +28,28 @@ export default function HomeContent({ bottomReachedCallback, showLoader }: HomeC
   const trendingVideos = mostPopularVideos.slice(0, AMOUNT_TRENDING_VIDEOS);
   
   const categoryTitles = Object.keys(videosByCategory || {});
-  const categoryGrids = categoryTitles.map((categoryTitle, index) => {
-    const videos = videosByCategory[categoryTitle];
+  const seenVideoIds = new Set([
+    ...userVideos.map(video => video && video.id),
+    ...trendingVideos.map(video => video && video.id),
+  ].filter(Boolean));
+  const categoryGrids = categoryTitles.reduce((grids: React.ReactNode[], categoryTitle, index) => {
+    const videos = (videosByCategory[categoryTitle] || []).filter(video => {
+      if (!video || seenVideoIds.has(video.id)) return false;
+      seenVideoIds.add(video.id);
+      return true;
+    });
+    if (!videos.length) return grids;
     const hideDivider = index === categoryTitles.length - 1;
-    return (
-      <VideoGrid 
-        title={categoryTitle} 
-        videos={videos} 
-        key={categoryTitle} 
-        hideDivider={hideDivider} 
+    grids.push(
+      <VideoGrid
+        title={categoryTitle}
+        videos={videos}
+        key={categoryTitle}
+        hideDivider={hideDivider}
       />
     );
-  });
+    return grids;
+  }, []);
 
   return (
     <div className='home-content'>

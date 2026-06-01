@@ -1,9 +1,26 @@
 @import '../../../styles/shared.scss';
 
 .comments-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
     h4 {
         color: $text-color-dark;
         display: inline-block;
         margin-right: 16px;
     }
+}
+
+.comments-header__sort {
+    align-items: center;
+    background: transparent;
+    border: 1px solid rgba(50, 174, 232, .22);
+    border-radius: 8px;
+    color: $brand-primary-dark;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 10px;
 }

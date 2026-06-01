@@ -11,10 +11,21 @@
     textarea {
       background: $surface-panel;
       border-color: rgba(50, 174, 232, 0.22);
+      border-radius: 8px;
+      padding: 10px 12px;
+      resize: vertical;
+      width: 100%;
     }
   }
 
   .user-image {
+    align-items: center;
+    background: rgba(50, 174, 232, .18);
+    border-radius: 50%;
+    color: $brand-primary-dark;
+    display: inline-flex;
+    font-weight: 800;
+    justify-content: center;
     width: $avatar-diameter;
     height: $avatar-diameter;
     margin-right: $avatar-margin;

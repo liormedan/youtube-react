@@ -12,7 +12,7 @@ export class SideBar extends React.Component {
       <aside className='side-nav'>
         <SideBarItem path='/' label='Home' icon='home'/>
         <SideBarItem path='/feed/trending' label='Trending' icon='fire'/>
-        <SideBarItem label='Followers' icon='spy'/>
+        <SideBarItem path='/feed/followers' label='Followers' icon='spy'/>
         <hr className='side-nav__divider'/>
         <SideBarHeader title='Library'/>
         <SideBarItem path='/library/history' label='History' icon='history'/>

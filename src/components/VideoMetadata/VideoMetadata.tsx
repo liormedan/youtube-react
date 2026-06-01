@@ -1,6 +1,5 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
-import {Button, Divider, Icon} from "semantic-ui-react";
 import './VideoMetadata.scss';
 import {Rating} from '../Rating/Rating';
 
@@ -15,25 +14,24 @@ export function VideoMetadata(props) {
       <h3>{props.video.snippet.title}</h3>
       <div className='video-stats'>
         <span>{viewCount} views</span>
-        <div className='video-actions' >
+        <div className='video-actions'>
           <Rating likeCount={props.video.statistics.likeCount}
                   dislikeCount={props.video.statistics.dislikeCount}/>
-          <Button basic icon labelPosition='left'>
-            <Icon name='share'/>
+          <button className='video-action-button' type='button'>
+            <span aria-hidden='true'>S</span>
             Share
-          </Button>
-          <Button basic icon labelPosition='left' disabled={!props.user} onClick={() => props.onSaveActivity('likedVideos')}>
-            <Icon name='thumbs up outline' />
+          </button>
+          <button className='video-action-button' disabled={!props.user} onClick={() => props.onSaveActivity('likedVideos')} type='button'>
+            <span aria-hidden='true'>+</span>
             Like
-          </Button>
-          <Button basic icon labelPosition='left' disabled={!props.user} onClick={() => props.onSaveActivity('watchLater')}>
-            <Icon name='clock outline' />
+          </button>
+          <button className='video-action-button' disabled={!props.user} onClick={() => props.onSaveActivity('watchLater')} type='button'>
+            <span aria-hidden='true'>W</span>
             Watch later
-          </Button>
+          </button>
         </div>
       </div>
-      <Divider/>
+      <hr className='video-metadata__divider'/>
     </div>
   );
 }
-

@@ -1,7 +1,6 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
 import './NextUpVideo.scss';
-import {Checkbox, Divider} from "semantic-ui-react";
 import {VideoPreview} from '../../VideoPreview/VideoPreview';
 
 export function NextUpVideo(props) {
@@ -9,13 +8,13 @@ export function NextUpVideo(props) {
     <React.Fragment>
       <div className='next-up-container'>
         <h4>Up next</h4>
-        <div className='up-next-toggle'>
+        <label className='up-next-toggle'>
           <span>Autoplay</span>
-          <Checkbox toggle defaultChecked/>
-        </div>
+          <input type='checkbox' defaultChecked />
+        </label>
       </div>
       <VideoPreview horizontal={true} video={props.video} pathname='/watch' search={`?v=${props.video.id}`}/>
-      <Divider/>
+      <hr className='next-up-divider'/>
     </React.Fragment>
   );
 }

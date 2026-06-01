@@ -33,7 +33,7 @@ function reduceCommentThreadState(response, videoId, state) {
   }, {});
 
   const prevCommentIds = state.byVideo[videoId] ? state.byVideo[videoId].ids : [];
-  const commentIds = [...prevCommentIds, ...Object.keys(newComments)];
+  const commentIds = Array.from(new Set([...prevCommentIds, ...Object.keys(newComments)]));
 
   const byVideoComment = {
     nextPageToken: response.nextPageToken,

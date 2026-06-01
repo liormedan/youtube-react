@@ -1,7 +1,6 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
 import './Comment.scss';
-import {Button, Image} from "semantic-ui-react";
 import {Rating} from '../../../components/Rating/Rating';
 
 export function Comment(props) {
@@ -9,17 +8,18 @@ export function Comment(props) {
     return <div/>;
   }
   const topLevelComment = props.comment.snippet.topLevelComment;
-  const {authorProfileImageUrl, authorDisplayName, textOriginal} = topLevelComment.snippet;
+  const {authorProfileImageUrl, authorDisplayName, textOriginal, textDisplay} = topLevelComment.snippet;
   const likeCount = topLevelComment.snippet.likeCount;
 
   return (
     <div className='comment'>
-      <Image className='user-image' src={authorProfileImageUrl} circular />
+      <img className='user-image' src={authorProfileImageUrl} alt={authorDisplayName} />
       <div>
         <div className='user-name'>{authorDisplayName}</div>
-        <span>{textOriginal}</span>
+        <span>{textOriginal || textDisplay}</span>
         <div className='comment-actions'>
-          <Rating likeCount={likeCount}/> <Button size='mini' compact>REPLY</Button>
+          <Rating likeCount={likeCount}/>
+          <button className='comment-reply-button' type='button'>REPLY</button>
         </div>
       </div>
     </div>

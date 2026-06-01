@@ -21,4 +21,19 @@
   .video-preview {
     margin-bottom: 18px;
   }
+
+  &__message {
+    background: #f8fafc;
+    border: 1px solid rgba($brand-primary, .14);
+    border-radius: 12px;
+    color: $text-color-dark;
+    margin-bottom: 18px;
+    padding: 14px 16px;
+  }
+
+  &__message--error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+  }
 }

@@ -1,15 +1,14 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
 import './AddComment.scss';
-import {Form, Image, TextArea} from "semantic-ui-react";
 
 export function AddComment() {
   return (
     <div className='add-comment'>
-      <Image className='user-image' src='https://via.placeholder.com/48x48' circular/>
-      <Form>
-        <Form.TextArea control={TextArea} autoHeight placeholder='Add a public comment' />
-      </Form>
+      <div className='user-image add-comment__avatar' aria-hidden='true'>U</div>
+      <form>
+        <textarea placeholder='Add a public comment' rows={2} />
+      </form>
     </div>
   );
 }

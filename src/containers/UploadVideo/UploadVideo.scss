@@ -89,10 +89,20 @@
     }
   }
 
-  &__submit.ui.button {
+  &__submit {
     background: linear-gradient(135deg, $brand-primary, $brand-accent);
+    border: none;
+    border-radius: 10px;
     color: $text-color-dark;
+    cursor: pointer;
     font-weight: 800;
+    min-height: 42px;
+    padding: 0 18px;
+
+    &:disabled {
+      cursor: wait;
+      opacity: .65;
+    }
   }
 
   &__list {
@@ -111,5 +121,72 @@
     .video-preview {
       margin-bottom: 18px;
     }
+  }
+}
+
+.upload-video-page__field {
+  color: $text-color-dark;
+  display: grid;
+  font-weight: 700;
+  gap: 8px;
+  margin-bottom: 14px;
+
+  input,
+  textarea {
+    border: 1px solid rgba(50, 174, 232, .22);
+    border-radius: 10px;
+    color: $text-color-dark;
+    min-height: 42px;
+    padding: 10px 12px;
+    width: 100%;
+  }
+
+  textarea {
+    min-height: 96px;
+    resize: vertical;
+  }
+}
+
+.upload-video-page__message {
+  background: #fff;
+  border: 1px solid rgba(50, 174, 232, .16);
+  border-radius: 10px;
+  color: $text-color-dark;
+  margin-bottom: 16px;
+  max-width: 780px;
+  padding: 12px 14px;
+}
+
+.upload-video-page__message--error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.upload-video-page__message--success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.upload-video-page__progress {
+  background: rgba(50, 174, 232, .12);
+  border-radius: 999px;
+  height: 28px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+
+  span {
+    background: $brand-primary;
+    display: block;
+    height: 100%;
+  }
+
+  strong {
+    color: $text-color-dark;
+    font-size: 12px;
+    inset: 0;
+    line-height: 28px;
+    position: absolute;
+    text-align: center;
   }
 }

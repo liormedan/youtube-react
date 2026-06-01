@@ -25,13 +25,17 @@
     gap: 12px;
   }
 
-  &__status.ui.label {
+  &__status {
     align-items: center;
+    background: #fff;
+    border: 1px solid rgba($brand-primary, .22);
+    border-radius: 999px;
     border-color: rgba($brand-primary, .22);
     color: $brand-primary-dark;
     display: inline-flex;
     gap: 6px;
     min-height: 36px;
+    padding: 0 12px;
   }
 
   &__identity {
@@ -70,10 +74,106 @@
     text-transform: uppercase;
   }
 
-  &__cta.ui.button {
+  &__cta {
     background: linear-gradient(135deg, $brand-primary, $brand-accent);
+    border: 0;
+    border-radius: 10px;
     color: $text-color-dark;
+    cursor: pointer;
+    display: inline-flex;
     font-weight: 800;
+    justify-content: center;
+    min-height: 42px;
+    padding: 12px 18px;
+    text-align: center;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: .65;
+    }
+  }
+
+  &__button {
+    align-items: center;
+    background: #fff;
+    border: 1px solid rgba($brand-primary, .18);
+    border-radius: 10px;
+    color: $text-color-dark;
+    cursor: pointer;
+    display: inline-flex;
+    font-weight: 700;
+    justify-content: center;
+    min-height: 38px;
+    padding: 10px 14px;
+  }
+
+  &__button--ghost {
+    background: transparent;
+  }
+
+  &__button--active {
+    background: $brand-primary;
+    color: #fff;
+  }
+
+  &__button--danger {
+    border-color: rgba(220, 38, 38, .34);
+    color: #b91c1c;
+  }
+
+  &__field {
+    display: block;
+    margin-bottom: 16px;
+
+    span {
+      color: $text-color-dark;
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    input,
+    textarea {
+      border: 1px solid rgba($brand-primary, .16);
+      border-radius: 10px;
+      color: $text-color-dark;
+      font: inherit;
+      min-height: 44px;
+      padding: 11px 12px;
+      width: 100%;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+  }
+
+  &__message {
+    background: #f8fafc;
+    border: 1px solid rgba($brand-primary, .14);
+    border-radius: 12px;
+    color: $text-color-dark;
+    margin-bottom: 18px;
+    max-width: 960px;
+    padding: 14px 16px;
+  }
+
+  &__message--info {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+
+  &__message--error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+  }
+
+  &__message--success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
   }
 
   &__stats {
@@ -233,7 +333,7 @@
     display: flex;
     gap: 8px;
 
-    .ui.button.active {
+    .creator-profile-page__button--active {
       background: $brand-primary;
       color: #fff;
     }
@@ -260,27 +360,29 @@
     margin-bottom: 8px;
   }
 
-  &__source-label.ui.label {
+  &__source-label {
     border-radius: 999px;
+    display: inline-flex;
     font-weight: 800;
+    padding: 6px 10px;
   }
 
-  &__source-label--youtube.ui.label {
+  &__source-label--youtube {
     background: #fee2e2;
     color: #991b1b;
   }
 
-  &__source-label--drive.ui.label {
+  &__source-label--drive {
     background: #dcfce7;
     color: #166534;
   }
 
-  &__source-label--direct.ui.label {
+  &__source-label--direct {
     background: #e0f2fe;
     color: #075985;
   }
 
-  &__source-label--link.ui.label {
+  &__source-label--link {
     background: #fef9c3;
     color: #854d0e;
   }
@@ -306,10 +408,10 @@
       color: #e5eef5;
     }
 
-    &__source-label--youtube.ui.label,
-    &__source-label--drive.ui.label,
-    &__source-label--direct.ui.label,
-    &__source-label--link.ui.label {
+    &__source-label--youtube,
+    &__source-label--drive,
+    &__source-label--direct,
+    &__source-label--link {
       background: rgba(50, 174, 232, .18);
       color: #d7f4ff;
     }

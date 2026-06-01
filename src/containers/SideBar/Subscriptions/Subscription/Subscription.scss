@@ -3,9 +3,11 @@
 .subscription {
   align-items: center;
   box-sizing: border-box;
+  color: inherit;
   display: flex;
   justify-content: space-between;
   padding: 12px 16px;
+  text-decoration: none;
   width: 100%;
 
   .subscription__main {

@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React from 'react';
-import {Message} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {SideBar} from '../SideBar/SideBar';
 import {InfiniteScroll} from '../../components/InfiniteScroll/InfiniteScroll';
@@ -60,8 +59,8 @@ class ActivityFeed extends React.Component {
         <SideBar/>
         <div className='activity-feed'>
           <h2>{config.title}</h2>
-          {this.state.error && <Message error>{this.state.error}</Message>}
-          {!this.state.loading && !this.state.videos.length && <Message>{config.empty}</Message>}
+          {this.state.error && <div className='activity-feed__message activity-feed__message--error'>{this.state.error}</div>}
+          {!this.state.loading && !this.state.videos.length && <div className='activity-feed__message'>{config.empty}</div>}
           <InfiniteScroll showLoader={this.state.loading}>
             {this.renderVideos()}
           </InfiniteScroll>
@@ -78,7 +77,7 @@ class ActivityFeed extends React.Component {
         <SideBar/>
         <div className='activity-feed'>
           <h2>{config.title}</h2>
-          <Message>{message}</Message>
+          <div className='activity-feed__message'>{message}</div>
         </div>
       </React.Fragment>
     );

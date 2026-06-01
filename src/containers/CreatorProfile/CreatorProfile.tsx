@@ -1,12 +1,11 @@
 // @ts-nocheck
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Form, Icon, Label, Message } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { SideBar } from '../SideBar/SideBar';
 import { VideoPreview } from '../../components/VideoPreview/VideoPreview';
-import { getCurrentUser, getFirebaseConfigured } from '../../store/reducers/auth';
-import { auth } from '../../services/firebase';
+import { getCurrentUser } from '../../store/reducers/auth';
+import { auth, isFirebaseConfigured } from '../../services/firebase';
 import { signOut } from 'firebase/auth';
 import { authStateChanged } from '../../store/actions/auth';
 import { createUserVideo, deleteUserVideo, listVideosByOwner, parseVideoSource, updateUserVideo } from '../../services/user-videos';
@@ -17,7 +16,6 @@ import { AppDispatch } from '../../store/configureStore';
 export default function CreatorProfile() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const firebaseConfigured = useSelector(getFirebaseConfigured);
   const user = useSelector(getCurrentUser);
 
   const [editingVideoId, setEditingVideoId] = useState<string | null>(null);
@@ -97,22 +95,26 @@ export default function CreatorProfile() {
     setProfileSuccess(null);
   };
 
-  const handleProfileDraftChange = (e: any, data: any) => {
-    setProfileDraft(prev => ({ ...prev, [data.name]: data.value }));
+  const handleProfileDraftChange = (event: any) => {
+    const { name, value } = event.target;
+    setProfileDraft(prev => ({ ...prev, [name]: value }));
     setProfileSuccess(null);
   };
 
-  const handleUploadDraftChange = (e: any, data: any) => {
-    setUploadDraft(prev => ({ ...prev, [data.name]: data.value }));
+  const handleUploadDraftChange = (event: any) => {
+    const { name, value } = event.target;
+    setUploadDraft(prev => ({ ...prev, [name]: value }));
     setVideoSuccess(null);
   };
 
-  const handleVideoDraftChange = (e: any, data: any) => {
-    setVideoDraft(prev => ({ ...prev, [data.name]: data.value }));
+  const handleVideoDraftChange = (event: any) => {
+    const { name, value } = event.target;
+    setVideoDraft(prev => ({ ...prev, [name]: value }));
     setVideoSuccess(null);
   };
 
-  const handleProfileSubmit = () => {
+  const handleProfileSubmit = (event: any) => {
+    event.preventDefault();
     setError(null);
     setProfileSaving(true);
     setProfileSuccess(null);
@@ -131,7 +133,8 @@ export default function CreatorProfile() {
       });
   };
 
-  const handleCreateVideoSubmit = () => {
+  const handleCreateVideoSubmit = (event: any) => {
+    event.preventDefault();
     setError(null);
     setUploadSaving(true);
     setVideoSuccess(null);
@@ -164,7 +167,8 @@ export default function CreatorProfile() {
     setVideoDraft({ description: '', sourceUrl: '', title: '' });
   };
 
-  const handleVideoSubmit = () => {
+  const handleVideoSubmit = (event: any) => {
+    event.preventDefault();
     setError(null);
     setVideoSaving(true);
     setVideoSuccess(null);
@@ -210,9 +214,9 @@ export default function CreatorProfile() {
       youtube: 'YouTube',
     };
     return (
-      <Label className={`creator-profile-page__source-label creator-profile-page__source-label--${sourceType || 'link'}`}>
+      <span className={`creator-profile-page__source-label creator-profile-page__source-label--${sourceType || 'link'}`}>
         {labels[sourceType] || labels.link}
-      </Label>
+      </span>
     );
   };
 
@@ -245,152 +249,122 @@ export default function CreatorProfile() {
           <strong>Connected</strong>
         </div>
       </div>
-      <Button basic onClick={handleSignOut} type='button'>
-        <Icon name='sign-out'/>
+      <button className='creator-profile-page__button creator-profile-page__button--ghost' onClick={handleSignOut} type='button'>
         Sign out
-      </Button>
+      </button>
     </div>
   );
 
   const renderProfileForm = () => (
-    <Form className='creator-profile-page__panel' onSubmit={handleProfileSubmit}>
+    <form className='creator-profile-page__panel' onSubmit={handleProfileSubmit}>
       <div className='creator-profile-page__panel-heading'>
         <h3>Private profile settings</h3>
         <p>Only you can read and update this profile document. Public upload cards use your display name and avatar snapshot.</p>
       </div>
-      <Form.Input
-        label='Display name'
-        name='displayName'
-        onChange={handleProfileDraftChange}
-        value={profileDraft.displayName}
-      />
-      <Form.Input
-        label='Avatar URL'
-        name='photoURL'
-        onChange={handleProfileDraftChange}
-        value={profileDraft.photoURL}
-      />
-      <Form.TextArea
-        label='Bio'
-        name='bio'
-        onChange={handleProfileDraftChange}
-        value={profileDraft.bio}
-      />
+      <label className='creator-profile-page__field'>
+        <span>Display name</span>
+        <input name='displayName' onChange={handleProfileDraftChange} value={profileDraft.displayName} />
+      </label>
+      <label className='creator-profile-page__field'>
+        <span>Avatar URL</span>
+        <input name='photoURL' onChange={handleProfileDraftChange} value={profileDraft.photoURL} />
+      </label>
+      <label className='creator-profile-page__field'>
+        <span>Bio</span>
+        <textarea name='bio' onChange={handleProfileDraftChange} value={profileDraft.bio} />
+      </label>
       <div className='creator-profile-page__theme-control'>
         <div>
           <h4>Interface theme</h4>
           <p>Saved to your account and applied after every sign in.</p>
         </div>
         <div className='creator-profile-page__theme-buttons' role='group' aria-label='Interface theme'>
-          <Button
-            active={profileDraft.theme === 'light'}
-            basic={profileDraft.theme !== 'light'}
+          <button
+            className={`creator-profile-page__button ${profileDraft.theme === 'light' ? 'creator-profile-page__button--active' : 'creator-profile-page__button--ghost'}`}
             onClick={() => setTheme('light')}
             type='button'>
-            <Icon name='sun'/>
             Light
-          </Button>
-          <Button
-            active={profileDraft.theme === 'dark'}
-            basic={profileDraft.theme !== 'dark'}
+          </button>
+          <button
+            className={`creator-profile-page__button ${profileDraft.theme === 'dark' ? 'creator-profile-page__button--active' : 'creator-profile-page__button--ghost'}`}
             onClick={() => setTheme('dark')}
             type='button'>
-            <Icon name='moon'/>
             Dark
-          </Button>
+          </button>
         </div>
       </div>
-      <Button className='creator-profile-page__cta' loading={profileSaving} type='submit'>Save profile</Button>
-    </Form>
+      <button className='creator-profile-page__cta' disabled={profileSaving} type='submit'>{profileSaving ? 'Saving...' : 'Save profile'}</button>
+    </form>
   );
 
   const renderUploadManager = () => {
     const source = parseVideoSource(uploadDraft.sourceUrl);
     return (
-      <Form className='creator-profile-page__panel' error={Boolean(error)} onSubmit={handleCreateVideoSubmit}>
+      <form className='creator-profile-page__panel' onSubmit={handleCreateVideoSubmit}>
         <div className='creator-profile-page__panel-heading'>
           <h3>Publish a link</h3>
           <p>Manage link-based uploads from your profile. Storage uploads are not supported yet.</p>
         </div>
-        <Message info>
+        <div className='creator-profile-page__message creator-profile-page__message--info'>
           medan-Tube does not store uploaded files right now. Publish public YouTube links, public Google Drive links, or direct video URLs. Google Drive files must be shared with anyone who has the link.
-        </Message>
-        <Form.Input
-          label='Title'
-          name='title'
-          onChange={handleUploadDraftChange}
-          placeholder='Video title'
-          required
-          value={uploadDraft.title}
-        />
-        <Form.Input
-          label='Video, Drive, or public media link'
-          name='sourceUrl'
-          onChange={handleUploadDraftChange}
-          placeholder='https://youtu.be/... or https://drive.google.com/file/d/...'
-          required
-          value={uploadDraft.sourceUrl}
-        />
+        </div>
+        <label className='creator-profile-page__field'>
+          <span>Title</span>
+          <input name='title' onChange={handleUploadDraftChange} placeholder='Video title' required value={uploadDraft.title} />
+        </label>
+        <label className='creator-profile-page__field'>
+          <span>Video, Drive, or public media link</span>
+          <input name='sourceUrl' onChange={handleUploadDraftChange} placeholder='https://youtu.be/... or https://drive.google.com/file/d/...' required value={uploadDraft.sourceUrl} />
+        </label>
         <div className='creator-profile-page__source-preview'>
           <span>Detected source</span>
           {renderSourceTypeBadge(source.sourceType)}
         </div>
-        <Form.TextArea
-          label='Description'
-          name='description'
-          onChange={handleUploadDraftChange}
-          placeholder='Tell viewers what this upload is about'
-          value={uploadDraft.description}
-        />
-        <Button className='creator-profile-page__cta' loading={uploadSaving} type='submit'>Publish link</Button>
-      </Form>
+        <label className='creator-profile-page__field'>
+          <span>Description</span>
+          <textarea name='description' onChange={handleUploadDraftChange} placeholder='Tell viewers what this upload is about' value={uploadDraft.description} />
+        </label>
+        <button className='creator-profile-page__cta' disabled={uploadSaving} type='submit'>{uploadSaving ? 'Publishing...' : 'Publish link'}</button>
+      </form>
     );
   };
 
   const renderVideoEditor = () => (
-    <Form className='creator-profile-page__panel creator-profile-page__panel--video' onSubmit={handleVideoSubmit}>
+    <form className='creator-profile-page__panel creator-profile-page__panel--video' onSubmit={handleVideoSubmit}>
       <div className='creator-profile-page__panel-heading'>
         <h3>Edit upload</h3>
         <p>Changes update your private upload library and the public site feed together.</p>
       </div>
-      <Form.Input
-        label='Title'
-        name='title'
-        onChange={handleVideoDraftChange}
-        required
-        value={videoDraft.title}
-      />
-      <Form.Input
-        label='Video link'
-        name='sourceUrl'
-        onChange={handleVideoDraftChange}
-        required
-        value={videoDraft.sourceUrl}
-      />
+      <label className='creator-profile-page__field'>
+        <span>Title</span>
+        <input name='title' onChange={handleVideoDraftChange} required value={videoDraft.title} />
+      </label>
+      <label className='creator-profile-page__field'>
+        <span>Video link</span>
+        <input name='sourceUrl' onChange={handleVideoDraftChange} required value={videoDraft.sourceUrl} />
+      </label>
       <div className='creator-profile-page__source-preview'>
         <span>Detected source</span>
         {renderSourceTypeBadge(parseVideoSource(videoDraft.sourceUrl).sourceType)}
       </div>
-      <Form.TextArea
-        label='Description'
-        name='description'
-        onChange={handleVideoDraftChange}
-        value={videoDraft.description}
-      />
+      <label className='creator-profile-page__field'>
+        <span>Description</span>
+        <textarea name='description' onChange={handleVideoDraftChange} value={videoDraft.description} />
+      </label>
       <div className='creator-profile-page__editor-actions'>
-        <Button className='creator-profile-page__cta' loading={videoSaving} type='submit'>Save upload</Button>
-        <Button basic onClick={cancelEditingVideo} type='button'>Cancel</Button>
+        <button className='creator-profile-page__cta' disabled={videoSaving} type='submit'>{videoSaving ? 'Saving...' : 'Save upload'}</button>
+        <button className='creator-profile-page__button creator-profile-page__button--ghost' onClick={cancelEditingVideo} type='button'>Cancel</button>
       </div>
-    </Form>
+    </form>
   );
 
   const renderContent = () => {
-    if (!firebaseConfigured) {
-      return <Message>Firebase is not configured yet. Add your project values to .env.local.</Message>;
+    if (!isFirebaseConfigured) {
+      return <div className='creator-profile-page__message'>Firebase is not configured yet. Add your project values to .env.local.</div>;
     }
 
     if (!user) {
-      return <Message>Sign in to view your creator profile.</Message>;
+      return <div className='creator-profile-page__message'>Sign in to view your creator profile.</div>;
     }
 
     const currentProfile = profile || user;
@@ -409,12 +383,11 @@ export default function CreatorProfile() {
             </div>
           </div>
           <div className='creator-profile-page__hero-actions'>
-            <Label className='creator-profile-page__status' basic>
-              <Icon name='check circle'/>
+            <span className='creator-profile-page__status'>
               Connected
-            </Label>
+            </span>
             <Link href='/studio/upload'>
-              <Button className='creator-profile-page__cta'>Quick upload</Button>
+              <span className='creator-profile-page__cta'>Quick upload</span>
             </Link>
           </div>
         </div>
@@ -436,9 +409,9 @@ export default function CreatorProfile() {
           </div>
         </div>
 
-        {error && <Message error content={error}/>}
-        {profileSuccess && <Message success content={profileSuccess}/>}
-        {videoSuccess && <Message success content={videoSuccess}/>}
+        {error && <div className='creator-profile-page__message creator-profile-page__message--error'>{error}</div>}
+        {profileSuccess && <div className='creator-profile-page__message creator-profile-page__message--success'>{profileSuccess}</div>}
+        {videoSuccess && <div className='creator-profile-page__message creator-profile-page__message--success'>{videoSuccess}</div>}
 
         {renderUploadManager()}
         <div className='creator-profile-page__list'>
@@ -447,9 +420,9 @@ export default function CreatorProfile() {
             <span>{loading ? 'Loading...' : `${videos.length} item${videos.length === 1 ? '' : 's'}`}</span>
           </div>
           {!loading && !videos.length && (
-            <Message>
+            <div className='creator-profile-page__message'>
               No uploads yet. Start with <Link href='/studio/upload'>your first publish</Link>.
-            </Message>
+            </div>
           )}
           {videos.map(video => (
             <div className='creator-profile-page__video-item' key={video.id}>
@@ -462,8 +435,8 @@ export default function CreatorProfile() {
                 video={video}
               />
               <div className='creator-profile-page__video-actions'>
-                <Button basic onClick={() => startEditingVideo(video)} type='button'>Edit</Button>
-                <Button basic color='red' onClick={() => handleDeleteVideo(video.id)} type='button'>Delete</Button>
+                <button className='creator-profile-page__button creator-profile-page__button--ghost' onClick={() => startEditingVideo(video)} type='button'>Edit</button>
+                <button className='creator-profile-page__button creator-profile-page__button--danger' onClick={() => handleDeleteVideo(video.id)} type='button'>Delete</button>
               </div>
               {editingVideoId === video.id && renderVideoEditor()}
             </div>

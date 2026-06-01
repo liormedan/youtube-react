@@ -1,7 +1,6 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import React from 'react';
 import './Rating.scss';
-import {Icon, Progress} from "semantic-ui-react";
 import {getShortNumberString} from '../../services/number/number-format';
 
 export function Rating(props) {
@@ -14,19 +13,22 @@ export function Rating(props) {
     const amountDislikes = parseFloat(props.dislikeCount);
     const percentagePositiveRatings = 100.0 * (amountLikes / (amountLikes + amountDislikes));
 
-    // Now that we have calculated the percentage, we bring the numbers into a better readable format
     likeCount = getShortNumberString(amountLikes);
     dislikeCount = getShortNumberString(amountDislikes);
-    rating = <Progress percent={percentagePositiveRatings} size='tiny'/>;
+    rating = (
+      <div className='rating__bar'>
+        <span style={{width: `${percentagePositiveRatings}%`}} />
+      </div>
+    );
   }
   return (
     <div className='rating'>
-      <div >
-        <Icon name='thumbs outline up'/>
+      <div>
+        <span className='rating__icon' aria-hidden='true'>+</span>
         <span>{likeCount}</span>
       </div>
-      <div >
-        <Icon name='thumbs outline down'/>
+      <div>
+        <span className='rating__icon' aria-hidden='true'>-</span>
         <span>{dislikeCount}</span>
       </div>
       {rating}

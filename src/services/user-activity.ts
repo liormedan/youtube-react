@@ -82,6 +82,12 @@ export function listUserActivity(uid, type) {
   }
 
   const q = query(col, orderBy(type === 'history' ? 'watchedAt' : 'updatedAt', 'desc'), limit(50));
-  return getDocs(q).then(snapshot => snapshot.docs.map(fromVideoActivity));
+  return getDocs(q)
+    .then(snapshot => snapshot.docs.map(fromVideoActivity))
+    .catch(error => {
+      if (error && error.code === 'permission-denied') {
+        return [];
+      }
+      throw error;
+    });
 }
-

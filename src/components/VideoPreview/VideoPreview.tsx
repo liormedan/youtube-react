@@ -53,7 +53,7 @@ export class VideoPreview extends React.Component {
     const viewCount = video.statistics ? video.statistics.viewCount : null;
     if(viewCount) {
       const viewCountShort = getShortNumberString(video.statistics.viewCount);
-      return `${viewCountShort} views ג€¢ ${timeAgo.format(publicationDate)}`;
+      return `${viewCountShort} views \u2022 ${timeAgo.format(publicationDate)}`;
     }
     return '';
   }

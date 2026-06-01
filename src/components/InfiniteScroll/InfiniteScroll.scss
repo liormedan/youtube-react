@@ -1,3 +1,20 @@
 .loader-container {
   padding-bottom: 14px;
+  text-align: center;
+}
+
+.loader-container__spinner {
+  animation: medan-spinner .8s linear infinite;
+  border: 3px solid rgba(50, 174, 232, .18);
+  border-radius: 50%;
+  border-top-color: #32aee8;
+  display: inline-block;
+  height: 28px;
+  width: 28px;
+}
+
+@keyframes medan-spinner {
+  to {
+    transform: rotate(360deg);
+  }
 }

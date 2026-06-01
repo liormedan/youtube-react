@@ -1,14 +1,13 @@
 // @ts-nocheck
 import React from 'react';
-import {Button, Form, Message, Progress} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import Link from 'next/link';
 import {SideBar} from '../SideBar/SideBar';
 import {VideoPreview} from '../../components/VideoPreview/VideoPreview';
-import {getCurrentUser, getFirebaseConfigured} from '../../store/reducers/auth';
+import {getCurrentUser} from '../../store/reducers/auth';
 import {createUserVideo, listVideosByOwner} from '../../services/user-videos';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../services/firebase';
+import { isFirebaseConfigured, storage } from '../../services/firebase';
 import './UploadVideo.scss';
 
 class UploadVideo extends React.Component {
@@ -60,52 +59,64 @@ class UploadVideo extends React.Component {
   }
 
   renderForm() {
-    if (!this.props.firebaseConfigured) {
-      return <Message>Firebase is not configured yet. Add your project values to .env.local.</Message>;
+    if (!isFirebaseConfigured) {
+      return <div className='upload-video-page__message'>Firebase is not configured yet. Add your project values to .env.local.</div>;
     }
 
     if (!this.props.user) {
-      return <Message>Sign in to publish uploads and connect them to your profile.</Message>;
+      return <div className='upload-video-page__message'>Sign in to publish uploads and connect them to your profile.</div>;
     }
 
     return (
-      <Form className='upload-video-page__form' error={Boolean(this.state.error)} success={Boolean(this.state.success)} onSubmit={this.handleSubmit}>
+      <form className='upload-video-page__form' onSubmit={(event) => {
+        event.preventDefault();
+        this.handleSubmit();
+      }}>
         <div className='upload-video-page__form-heading'>
           <h3>Upload details</h3>
           <p>Choose a video file to upload directly to our servers. Published items will appear on Home and in your profile library.</p>
         </div>
-        <Form.Input
-          label='Title'
+        <label className='upload-video-page__field'>
+          <span>Title</span>
+          <input
           name='title'
           onChange={this.handleInputChange}
           placeholder='Video title'
           required
           value={this.state.title}
-        />
-        <Form.Input
+          />
+        </label>
+        <label className='upload-video-page__field'>
+          <span>Video File</span>
+          <input
           type='file'
           accept='video/mp4,video/webm'
-          label='Video File'
           name='videoFile'
           onChange={this.handleFileChange}
           required
-        />
-        <Form.TextArea
-          label='Description'
+          />
+        </label>
+        <label className='upload-video-page__field'>
+          <span>Description</span>
+          <textarea
           name='description'
           onChange={this.handleInputChange}
           placeholder='Tell viewers what this upload is about'
           value={this.state.description}
-        />
-        <Message error content={this.state.error}/>
-        <Message success content={this.state.success}/>
+          />
+        </label>
+        {this.state.error && <div className='upload-video-page__message upload-video-page__message--error'>{this.state.error}</div>}
+        {this.state.success && <div className='upload-video-page__message upload-video-page__message--success'>{this.state.success}</div>}
         {this.state.uploadProgress > 0 && this.state.uploadProgress < 100 && (
-          <Progress percent={this.state.uploadProgress} indicating progress>
-            Uploading to Firebase Storage...
-          </Progress>
+          <div className='upload-video-page__progress'>
+            <span style={{width: `${this.state.uploadProgress}%`}} />
+            <strong>Uploading to Firebase Storage... {this.state.uploadProgress}%</strong>
+          </div>
         )}
-        <Button className='upload-video-page__submit' loading={this.state.loading} type='submit'>Publish video</Button>
-      </Form>
+        <button className='upload-video-page__submit' disabled={this.state.loading} type='submit'>
+          {this.state.loading ? 'Publishing...' : 'Publish video'}
+        </button>
+      </form>
     );
   }
 
@@ -115,7 +126,7 @@ class UploadVideo extends React.Component {
     }
 
     if (!this.state.videos.length) {
-      return <Message>You have not published any uploads yet.</Message>;
+      return <div className='upload-video-page__message'>You have not published any uploads yet.</div>;
     }
 
     return (
@@ -138,8 +149,9 @@ class UploadVideo extends React.Component {
     );
   }
 
-  handleInputChange = (event, data) => {
-    this.setState({[data.name]: data.value});
+  handleInputChange = (event) => {
+    const {name, value} = event.target;
+    this.setState({[name]: value});
   };
 
   handleFileChange = (event) => {
@@ -222,7 +234,6 @@ class UploadVideo extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    firebaseConfigured: getFirebaseConfigured(state),
     user: getCurrentUser(state),
   };
 }

@@ -1,6 +1,5 @@
 ﻿// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
-import {Loader} from 'semantic-ui-react';
 import './InfiniteScroll.scss';
 
 export function InfiniteScroll(props) {
@@ -32,7 +31,7 @@ export function InfiniteScroll(props) {
     <React.Fragment>
       {props.children}
       <div className='loader-container' ref={sentinelRef}>
-        <Loader active={props.showLoader} inline='centered' />
+        {props.showLoader && <div className='loader-container__spinner' aria-label='Loading' />}
       </div>
     </React.Fragment>
   );
